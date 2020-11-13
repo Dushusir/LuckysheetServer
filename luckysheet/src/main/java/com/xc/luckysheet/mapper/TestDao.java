@@ -7,6 +7,9 @@ import org.apache.ibatis.annotations.Select;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author Administrator
+ */
 public interface TestDao {
 
     @Select({

@@ -1,6 +1,5 @@
 package com.xc.luckysheet.service;
 
-
 import com.xc.luckysheet.dao.QsTuGridDao;
 import com.xc.luckysheet.entity.TuGridModel;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +10,7 @@ import java.util.*;
 
 /**
  *
+ * @author Administrator
  */
 @Slf4j
 @Service
@@ -48,7 +48,6 @@ public class TuGridService extends BaseService<TuGridModel> {
     public List<TuGridModel> selectByKw(int pageNo, HashMap _map) {
         setPage(_map, pageNo);
         List<TuGridModel>_models= qsTuGridDao.selectByMap(_map);
-        TuGridModel.sizeImghandle(_models);
         return _models;
     }
 

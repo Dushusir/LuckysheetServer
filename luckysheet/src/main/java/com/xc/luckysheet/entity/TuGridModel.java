@@ -49,26 +49,4 @@ public class TuGridModel implements BaseModel{
     private Long uploadsize;//上传文件的大小 字节
     private Long mongodbsize;//mongodb的大小 字节
 
-
-
-    //不存储
-    private List<TuGridModel> tuGridModels=new ArrayList<TuGridModel>();//下级文件
-    private UserModel userModel; //用户信息
-    private MultipartFile uploadFile;//上传的文件
-    private String grid_thumb_base64;//图像
-    private List<String> tags;//标签（上传文件时使用）
-    private String category_path;//分类路径 (执行存储过程获取)
-    //搜索使用
-    private Date start_grid_create_time;// '创建时间',
-    private Date end_grid_create_time;// '创建时间',
-    private Date start_grid_update_time;// '最后修改时间',
-    private Date end_grid_update_time;// '最后修改时间',
-
-    private Long dirsize;//文件夹大小
-    private String uploadsizeStr;//上传文件的大小
-    private String mongodbsizeStr;//mongodb的大小
-    private String dirsizeStr;//文件夹大小
-
-
-
 }
