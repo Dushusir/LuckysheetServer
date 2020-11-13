@@ -6,7 +6,6 @@ import com.xc.common.utils.JsonUtil;
 import com.xc.luckysheet.entity.TuGridModel;
 import com.xc.luckysheet.entity.enummodel.OperationTypeEnum;
 import com.xc.luckysheet.postgre.server.PostgresGridFileGetService;
-import com.xc.luckysheet.utils.MyUtil;
 import com.xc.luckysheet.utils.Pako_GzipUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -341,10 +340,7 @@ public class JfGridFileController {
      * @return
      */
     private String check(HttpServletRequest request, String _id, TuGridModel curmodel, OperationTypeEnum operationTypeEnum){
-        //测试,用于演示
-        if(MyUtil.isShow){
-            return "";
-        }
+        //校验代码
         return "";
     }
 }

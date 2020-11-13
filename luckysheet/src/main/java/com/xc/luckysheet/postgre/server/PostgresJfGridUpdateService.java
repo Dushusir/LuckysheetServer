@@ -162,15 +162,6 @@ public class PostgresJfGridUpdateService {
             if (SheetOperationEnum.contains(bson.get("t").toString())) {
                 SheetOperationEnum _e = SheetOperationEnum.valueOf(bson.get("t").toString());
 
-                //测试,用于演示
-                if (MyUtil.isShow) {
-                    if (_e == SheetOperationEnum.v) {
-
-                    } else {
-                        return "无对应操作符：" + JsonUtil.toJson(bson);
-                    }
-                }
-
                 switch (_e) {
                     case c:
                         //3.9	图表操作 全部转向rails （第一块）

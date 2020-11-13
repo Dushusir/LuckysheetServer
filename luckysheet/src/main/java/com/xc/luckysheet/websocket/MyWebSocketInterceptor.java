@@ -1,7 +1,6 @@
 package com.xc.luckysheet.websocket;
 
 import com.xc.luckysheet.utils.MyURLUtil;
-import com.xc.luckysheet.utils.MyUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
@@ -79,22 +78,7 @@ public class MyWebSocketInterceptor extends HttpSessionHandshakeInterceptor {
      * @return
      */
     private String check(String _id){
-        //测试,用于演示
-        if(MyUtil.isShow){
-            return "";
-        }
-//        //获取对应的记录
-//        //按mongodbkey获取 创建人id(grid_creator) 表格id(list_id)，表格状态（grid_status 1正常 -1垃圾箱 ）是否分享 (grid_share_status 0否 1是)
-//        //_model=tuGridService.selectGridCreatorByMongodbkey(_ObjectId.toString());
-//        TuGridModel _model=tuGridService.selectGridCreatorByListId(_id);
-//
-//        if(_model==null){
-//            return "表格不存在";
-//        }
-//        if(!_model.getGrid_status().equals(1)){
-//            return "表格已删除";
-//        }
-
+        //此处校验代码
         return "";
     }
 }

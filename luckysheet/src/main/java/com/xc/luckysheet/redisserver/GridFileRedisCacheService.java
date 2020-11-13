@@ -3,13 +3,10 @@ package com.xc.luckysheet.redisserver;
 import com.mongodb.DBObject;
 import com.xc.common.config.redis.RedisCacheService;
 import com.xc.common.config.redis.RedisQueueService;
-import com.xc.luckysheet.utils.MD5Util;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
-import java.util.LinkedHashMap;
 import java.util.List;
 
 

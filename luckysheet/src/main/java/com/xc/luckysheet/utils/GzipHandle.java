@@ -85,10 +85,4 @@ public class GzipHandle {
         return list;
     }
 
-    public static void main(String[] args){
-        BasicDBList list=new BasicDBList();
-        System.out.println(list);
-        String str=toCompressByCelldata(list);
-        System.out.println(str);
-    }
 }
