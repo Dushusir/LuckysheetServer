@@ -29,6 +29,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * @author Administrator
+ */
 @Slf4j
 @Service
 public class PostgresJfGridUpdateService {
@@ -54,56 +57,6 @@ public class PostgresJfGridUpdateService {
      */
     public String insert(PgGridDataModel dbObject) {
         return pgGridFileDao.insert(dbObject);
-    }
-
-    public String insert(List<PgGridDataModel> dbObject) {
-        return pgGridFileDao.InsertIntoBatch(dbObject);
-    }
-
-    /**
-     * 每1个sheet对应一个工作簿(导入时)
-     *
-     * @param dbObject
-     * @param list_id
-     * @return
-     */
-    public String insert(DBObject dbObject, Long list_id) {
-        if (dbObject != null && dbObject.containsField("jfgridfile")) {
-            Object bson = dbObject.get("jfgridfile");
-            if (bson instanceof BasicDBList || bson instanceof List) {
-                //分块存储
-                List<PgGridDataModel> _blocks = new ArrayList<PgGridDataModel>();
-                List<DBObject> _list = (List<DBObject>) bson;
-                for (int x = 0; x < _list.size(); x++) {
-                    _list.get(x).put("list_id", list_id);
-                    //  _blocks.addAll(JfGridConfigModel.toDataSplit(_list.get(x)));
-                }
-
-                String _mongodbKey = pgGridFileDao.InsertIntoBatch(_blocks);
-                if (_mongodbKey == null) {
-                    return "创建兔表格错误";
-                }
-            }
-        }
-        return "";
-    }
-
-    public String del(String id) {
-        return pgGridFileDao.delDocument(id);
-    }
-
-    public String delByKey(List<String> ids) {
-        if (ids == null || ids.size() == 0) {
-            return "";
-        }
-        return pgGridFileDao.delDocuments(ids);
-    }
-
-    public String delByGridKeys(List<String> ids) {
-        if (ids == null || ids.size() == 0) {
-            return "";
-        }
-        return pgGridFileDao.delByGridKeys(ids);
     }
 
 
@@ -142,16 +95,6 @@ public class PostgresJfGridUpdateService {
             log.info("bson instanceof BasicDBObject--bson");
             _sb.append(chooseOperation(gridKey, bson));
         }
-        //更新信息 分块
-        //tuGridService.updateGridInfo(gridKey);
-        return _sb.toString();
-    }
-
-    //执行更新操作,集合拆分
-    public String updateThumb(String gridKey, DBObject bson) {
-        StringBuilder _sb = new StringBuilder();
-        log.info("bson instanceof BasicDBObject--bson");
-        _sb.append(chooseOperation(gridKey, bson));
         return _sb.toString();
     }
 
@@ -251,10 +194,6 @@ public class PostgresJfGridUpdateService {
             } else {
                 _result = "无对应操作符：" + JsonUtil.toJson(bson);
             }
-//            if(_result.length()==0){
-//                //更新信息 分块
-//                tuGridService.updateGridInfo(gridKey);
-//            }
             return _result;
         } else {
             return "无操作符：" + JsonUtil.toJson(bson);
@@ -406,33 +345,6 @@ public class PostgresJfGridUpdateService {
                         return "更新失败";
                     }
                 }
-
-//                Query query=new Query();
-//                query.addCriteria(Criteria.where("_id").is(gridKey));
-//                Update update=new Update();
-//
-//                for(String _index:_v.keySet()){
-//                    try{
-//                        // _index 为工作簿index值
-//                        Integer _i=Integer.parseInt(_v.get(_index).toString());//要设置的order值
-//                        if(_i!=null){
-//                            //2、数据所在的sheet的序号
-//                            Integer _sheetPosition=JfGridFileUtil.getSheetPositionByIndex(_dbObject,Integer.parseInt(_index));
-//                            if(_sheetPosition!=null){
-//                                update.set("jfgridfile."+_sheetPosition+".order",_i);
-//                            }
-//                        }
-//                    }catch (Exception ex){
-//                        logger.error(ex.toString());
-//                    }
-//                }
-//                if(update.getUpdateObject().keySet().size()>0){
-//                    boolean _result=jfGridFileDao.updateOne(query,update);
-//                    if(!_result){
-//                        return "更新失败";
-//                    }
-//                }
-
             }
         } catch (Exception ex) {
             log.error(ex.getMessage());
@@ -466,8 +378,6 @@ public class PostgresJfGridUpdateService {
                 return "gridKey=" + gridKey + "的数据表格不存在";
             }
             //2、数据所在的sheet的序号
-            //Integer _sheetPosition=JfGridFileUtil.getSheetPositionByIndex(_dbObject,deleIndex);
-            //if(_sheetPosition==null){
             PgGridDataModel model = new PgGridDataModel();
             model.setIndex(deleIndex);
             model.setList_id(gridKey);
@@ -507,8 +417,6 @@ public class PostgresJfGridUpdateService {
                 return "参数错误";
             }
             //1、先获取原数据
-            //DBObject _dbObject=jfGridFileGetService.getJfgridByGridKey(gridKey, copyindex);
-            //DBObject _dbObject=jfGridFileGetService.getByGridKey(gridKey, copyindex);
             List<DBObject> _dbObjects = pgGridFileDao.getBlockAllByGridKey(gridKey, copyindex);
             if (_dbObjects == null) {
                 return "gridKey=" + gridKey + "的数据表格不存在";
@@ -528,22 +436,10 @@ public class PostgresJfGridUpdateService {
                 _dbObject.put("status", 0);
             }
 
-
-            //Query query=new Query();
-            //_dbObject.put("list_id",gridKey);
             String _mongodbKey = pgGridFileDao.InsertBatchDb(_dbObjects);
             if (_mongodbKey == null) {
                 return "更新失败";
             }
-//            Query query=new Query();
-//            query.addCriteria(Criteria.where("_id").is(gridKey));
-//            Update update=new Update();
-//            update.push("jfgridfile",_dbObject);
-//            boolean _result=jfGridFileDao.updateOne(query,update);
-//            if(!_result){
-//                return "更新失败";
-//            }
-
 
         } catch (Exception ex) {
             log.error(ex.getMessage());
@@ -602,14 +498,6 @@ public class PostgresJfGridUpdateService {
             if (_mongodbKey == null) {
                 return "更新失败";
             }
-//            Query query=new Query();
-//            query.addCriteria(Criteria.where("_id").is(gridKey));
-//            Update update=new Update();
-//            update.push("jfgridfile",v);
-//            boolean _result=jfGridFileDao.updateOne(query,update);
-//            if(!_result){
-//                return "更新失败";
-//            }
 
         } catch (Exception ex) {
             log.error(ex.getMessage());
@@ -650,10 +538,7 @@ public class PostgresJfGridUpdateService {
                 if (_v.containsField("direction")) {
                     direction = _v.get("direction").toString().trim();
                 }
-//                //测试使用
-//                if(data==null || data.size()==0){
-//                    data=JfGridFileUtil.getTestData(rc,len);
-//                }
+
             }
             if (index == null || len == null) {
                 return "参数错误";
@@ -666,11 +551,7 @@ public class PostgresJfGridUpdateService {
                 return "list_id=" + gridKey + ",index=" + i + "的sheet不存在";
                 //return "gridKey="+gridKey+"的数据表格不存在";
             }
-//            //2、数据所在的sheet的序号
-//            Integer _sheetPosition=JfGridFileUtil.getSheetPositionByIndex(_dbObject,i);
-//            if(_sheetPosition==null){
-//                return "index="+i+"的sheet不存在";
-//            }
+
             DBObject json_data = JfGridFileUtil.getObjectByIndex(_dbObject, "json_data");
             Integer _column = JfGridFileUtil.getIntegerByIndex(json_data, "column"),
                     _row = JfGridFileUtil.getIntegerByIndex(json_data, "row");
@@ -831,11 +712,6 @@ public class PostgresJfGridUpdateService {
                 return "list_id=" + gridKey + ",index=" + i + "的sheet不存在";
                 //return "gridKey="+gridKey+"的数据表格不存在";
             }
-//            //2、数据所在的sheet的序号
-//            Integer _sheetPosition=JfGridFileUtil.getSheetPositionByIndex(_dbObject,i);
-//            if(_sheetPosition==null){
-//                return "index="+i+"的sheet不存在";
-//            }
 
             DBObject json_data = JfGridFileUtil.getObjectByIndex(_dbObject, "json_data");
 
@@ -870,7 +746,7 @@ public class PostgresJfGridUpdateService {
                     }
                 }
 
-                //mongodb多块
+                // 多块
 
                 //更新一下config中的merge信息
                 DBObject _d = new BasicDBObject();
@@ -1004,11 +880,6 @@ public class PostgresJfGridUpdateService {
                 return "list_id=" + gridKey + ",index=" + i + "的sheet不存在";
                 //return "gridKey="+gridKey+"的数据表格不存在";
             }
-//            //2、数据所在的sheet的序号
-//            Integer _sheetPosition=JfGridFileUtil.getSheetPositionByIndex(_dbObject,i);
-//            if(_sheetPosition==null){
-//                return "index="+i+"的sheet不存在";
-//            }
 
             Query query = new Query();
             //query.addCriteria(Criteria.where("list_id").is(gridKey));
@@ -1542,7 +1413,6 @@ public class PostgresJfGridUpdateService {
             //压缩处理
             return "";
         }
-
 
         //不压缩处理
         try {
@@ -2104,10 +1974,6 @@ public class PostgresJfGridUpdateService {
             log.error(ex.getMessage());
         }
         return "";
-    }
-
-    public void deleteSheetForQuartz() {
-        pgGridFileDao.delDocumentsByDel();
     }
 
     /**

@@ -2,7 +2,7 @@
 server:
   port: 9003
   servlet:
-    context-path: /dataqk
+    context-path: /luckysheet
 spring:
   profiles:
     active: @profiles.active@

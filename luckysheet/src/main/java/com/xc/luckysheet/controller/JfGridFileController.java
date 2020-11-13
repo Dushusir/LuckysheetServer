@@ -29,7 +29,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @Api(description = "luckysheet测试接口")
-@RequestMapping(value = {"/luckysheet/api"})
+@RequestMapping(value = {"/api"})
 public class JfGridFileController {
     /*
         /load       加载默认表格   （）

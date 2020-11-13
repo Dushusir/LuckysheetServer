@@ -28,24 +28,9 @@ import java.util.Map;
  * window启动
  * java -jar web-test.jar
  * 测试类
- * http://localhost:9003/dataqk/test/constant?param=%E6%B5%8B%E8%AF%95
- * http://localhost:9003/webls/test/constant?param=测试
- * http://localhost:9003/webls/swagger-ui.html
- * http://localhost:9003/webls/swagger-ui.html
- * http://localhost:9003/webls/doc.html#/home
- *
- *
- * http://localhost:9003/dataqk/test/constant?param=测试
- * http://localhost:9003/dataqk/swagger-ui.html
- * http://localhost:9003/dataqk/swagger-ui.html
- * http://localhost:9003/dataqk/doc.html#/home
- *
- * http://localhost:8080/dataqk/doc.html#/home
- * http://localhost:8080/staticft/tpreport/static/qksheet/yhIndex.html
- * http://localhost:8080/staticqk/qkIndex.html
- * http://localhost:85/staticqk/qkIndex.html
  *
  * http://luckysheet.lashuju.com/demo/qkIndex.html
+ * http://127.0.0.1:85/luckysheet/demo/
  * @author Administrator
  */
 @Slf4j
