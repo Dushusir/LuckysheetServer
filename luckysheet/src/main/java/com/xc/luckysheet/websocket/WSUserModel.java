@@ -7,19 +7,36 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
+/**
+ * @author Administrator
+ */
 @Data
 public class WSUserModel {
 
+    /**
+     * 用户key
+     */
     public static final String USER_TOKEN="t";
+    /**
+     * 文档key
+     */
     public static final String USER_GRIDKEY="g";
 
-    //session id
+    /**
+     * ws-session
+     */
     private WebSocketSession ws;
-    //session id
+    /**
+     * session id
+     */
     private String id;
-    //接收token
+    /**
+     * 接收token
+     */
     private String token;
-    //文档id
+    /**
+     * 文档id
+     */
     private String gridKey;
 
     public WSUserModel(WebSocketSession ws){
@@ -39,8 +56,11 @@ public class WSUserModel {
     }
 
 
-
-    //外层key gridKey（文档id），内层key session ID（用户id）
+    /**
+     * 外层key gridKey（文档id），内层key session ID（用户id）
+     * @param maps
+     * @param wm
+     */
     public static void webSocketMapAdd(Hashtable<String,Hashtable<String,WSUserModel>> maps,WSUserModel wm){
         if(maps.containsKey(wm.getGridKey())){
             maps.get(wm.getGridKey()).put(wm.getId(),wm);

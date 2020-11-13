@@ -7,6 +7,7 @@ import org.apache.ibatis.mapping.SqlSource;
 
 /**
  * 根据条件物理删除
+ * @author Administrator
  */
 public class PhysicsDelete extends AbstractMethod {
 

@@ -229,19 +229,4 @@ public class UserModel implements BaseModel,Serializable {
         }
         return "没有"+auth.getValue()+"权限";
     }
-
-
-    //密码设置
-    public void setPassWordMd5(){
-        if(ConfigerService.dbType.equals("2")){
-            this.setUser_password(MD5Util.MD5Encode(this.getUser_password()));
-        }
-    }
-
-    public static String setPassWordMd5(String pwd){
-        if(ConfigerService.dbType.equals("2")){
-            return MD5Util.MD5Encode(pwd);
-        }
-        return pwd;
-    }
 }

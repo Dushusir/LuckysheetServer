@@ -30,16 +30,6 @@ public class GridFileRedisCacheService {
     public String email_check_content="email_recheck_num:";
 
     /**
-     * oracle查询数据库数据源保存入redis
-     */
-    public String oracle_check_content="mb:oracle:";
-
-    /**
-     * 场景计数
-     */
-    private String stock_plate_check_content="qk:stock_plate:";
-
-    /**
      * 批量更新数据
      */
     private String dbdata_content="qk:dbdata:";
@@ -53,52 +43,6 @@ public class GridFileRedisCacheService {
      * 收集指令信息内容
      */
     private String qk_handle_content="qk:handler:";
-
-    /**
-     * 新增email的验证码信息
-     * @param key
-     * @param val
-     */
-    public void raddEmaiContent(String key, Object val) {
-        String redisKey = email_check_content + key;
-        log.info("raddEmaraddEmaiContentiContent---redisKey="+redisKey+"val="+val);
-        redisCache.addCache(redisKey, val, 5);
-    }
-
-    /**
-     * 根据key 获得email验证码信息
-     * @param key
-     */
-    public Object rgetEmailContent(String key) {
-        String redisKey = email_check_content + key;
-        log.info("raddEmaiContent---redisKey="+redisKey);
-        return redisCache.getCache(redisKey);
-    }
-
-    public int removeRedisMail(String key){
-        String redisKey = email_check_content + key;
-        log.info("removeRedisMail---redisKey="+redisKey);
-        return redisCache.deleteCaches(redisKey);
-    }
-
-    public void raddMD5ToOraleContent(String sql , Object val){
-        String redisKey=oracle_check_content+MD5Util.MD5Encode(sql);
-        redisCache.addCache(redisKey, val, 3);
-    }
-
-    public List<LinkedHashMap<String, Object>> rgetMD5ToOralceContent(String sql){
-        try{
-            String redisKey=oracle_check_content+MD5Util.MD5Encode(sql);
-            Object obj= redisCache.getCache(redisKey);
-            if(obj==null || "".equals(obj)){
-                return null;
-            }
-            List<LinkedHashMap<String, Object>> llm=(List<LinkedHashMap<String, Object>>) obj;
-            return llm;
-        }catch(Exception ex){
-            return null;
-        }
-    }
 
 
     public List<DBObject> rgetDbDataContent(String key){
@@ -179,10 +123,4 @@ public class GridFileRedisCacheService {
         }
     }
 
-    //场景访问量保存.
-
-    public void raddHandlerContent(String key,String db){
-        String redisKey=qk_handle_content+key;
-        redisCache.addList(redisKey, db);
-    }
 }

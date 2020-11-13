@@ -42,7 +42,7 @@ public class SwaggerConfig {
                 //页面标题
                 .title("SpringBoot 使用 Swagger2 构建RESTful API")
                 //创建人
-                .contact(new Contact("Test", "http://www.xuanqi.co/", "631789194@qq.com"))
+                .contact(new Contact("Test", "http://www.test.co/", "test@qq.com"))
                 //版本号
                 .version("1.0")
                 //描述

@@ -6,6 +6,7 @@ import lombok.Data;
 
 /**
  * redis消息
+ * @author Administrator
  */
 @Data
 public class RedisMessageModel {

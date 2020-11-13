@@ -16,23 +16,12 @@ spring:
       charset: UTF-8
       enabled: true
 
-#图表部分处理，目前全部由java处理,
-rails.url: http://192.168.1.3:3002
-#上传文件路径（\\u7ed3尾）
-upload.path: D:\\quicksheet_upload\\
-#xls处理aspose授权文件路径
-aspose.path: D:\\aspose\\Aspose.Total.Java.lic
-#地址前缀 weblogic使用 /data
-urlHead: /datatu
-#数据库类型，关系到分页、密码处理   1、mysql  2、oracle
-dbType: mysql
-
 #redis通道名称
 redis.channel: luckysheet.channel
 #表格中块的大小，新增加时写入每一个sheet的第一个模块中
 row_size: 500
 col_size: 500
-#是否启用pgsql作为存储数据（0为是，1为否）
+#是否启用pgsql作为存储数据（0为是，1为否）目前只能设置为0
 pgSetUp: 0
 #使用服务器类型
 servertype: tomcat

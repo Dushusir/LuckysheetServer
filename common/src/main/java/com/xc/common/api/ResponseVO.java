@@ -12,7 +12,6 @@ import java.io.Serializable;
 
 /**
  * 返回对象
- * Alt+Enter 添加serialVersionUID
  * @author Administrator
  */
 @Data

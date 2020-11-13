@@ -11,6 +11,7 @@ import java.util.List;
 /**
  * redis通信管道类
  * 将要推送到websocket的数据保存到redis中
+ * @author Administrator
  */
 @Data
 @EqualsAndHashCode(callSuper=false)

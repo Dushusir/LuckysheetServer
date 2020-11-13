@@ -5,11 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * Created with IntelliJ IDEA.
- * User: 1
- * Date: 17-8-16
- * Time: 下午12:26
- * To change this template use File | Settings | File Templates.
+ * @author Administrator
  */
 public abstract class BaseService<T> {
 
@@ -51,17 +47,10 @@ public abstract class BaseService<T> {
             pageNo = 1;
         }
 
-        if(ConfigerService.dbType.equals("2")){
-            //oracle分页
-            int _start = (pageNo - 1) * pageCount+1;
-            _map.put("pageCount",_start+pageCount-1);
-            _map.put("start",_start);
-        }else{
-            //mysql 分页 limit
-            int _start = (pageNo - 1) * pageCount;
-            _map.put("pageCount",pageCount);
-            _map.put("start",_start);
-        }
+        //mysql 分页 limit
+        int _start = (pageNo - 1) * pageCount;
+        _map.put("pageCount",pageCount);
+        _map.put("start",_start);
 
 
     }

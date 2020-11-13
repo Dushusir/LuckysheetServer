@@ -1,6 +1,9 @@
 package com.xc.common.constant;
 
 
+/**
+ * @author Administrator
+ */
 public interface SysConstant {
 
     interface MSG{

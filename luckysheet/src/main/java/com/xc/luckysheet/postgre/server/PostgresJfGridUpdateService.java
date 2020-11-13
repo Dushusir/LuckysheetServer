@@ -1784,35 +1784,14 @@ public class PostgresJfGridUpdateService {
 
 
     /**
-     * 3.9	图表操作 全部转向rails
+     * 3.9	图表操作
      *
      * @param gridKey2
      * @param bson
      * @return
      */
     public String Operation_c(String gridKey2, DBObject bson) {
-        if (1 == 1) {
-            return Operation_c2(gridKey2, bson);
-        }
-
-        //调用rails
-        String str = JsonUtil.toJson(bson);
-        String data = MyURLUtil.urlEncode(str);
-        log.info(data);
-        ObjectId gridKey = null;
-
-        String i = bson.get("i").toString();//	当前sheet的index值
-        String id = pgGridFileDao.getKeyByGridKeyAndIndex(gridKey2, i, "fblock");
-        if (!StringUtil.isNullOrEmpty(id)) {
-            String result = RequestUrl.sendPost(ConfigerService.railsUrl, "gridKey=" + id + "&data=" + data);
-            if (result.equals("ok")) {
-                return "";
-            } else {
-                return result;
-            }
-        } else {
-            return "list_id=" + gridKey + ",index=" + i + "的sheet不存在";
-        }
+        return Operation_c2(gridKey2, bson);
     }
 
     /**

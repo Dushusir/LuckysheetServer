@@ -11,13 +11,18 @@ import org.springframework.data.redis.serializer.RedisSerializer;
 
 /**
  * 监听
+ * @author Administrator
  */
 public class RedisMessageListener implements MessageListener {
 
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
 
-    //订阅者收到消息
+    /**
+     * 订阅者收到消息
+     * @param message
+     * @param pattern
+     */
     @Override
     public void onMessage(Message message, byte[] pattern) {
         //JSON.parse(serializerValue.deserialize(message.getBody()).toString())
