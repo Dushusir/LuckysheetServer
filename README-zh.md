@@ -19,6 +19,4 @@
 - [@wpxp123456](https://github.com/wpxp123456)
 
 ## 版权信息
-[MIT](http://opensource.org/licenses/MIT)
-
-Copyright (c) 2020-present, mengshukeji
+有关详细信息，请查阅附件的[LICENSE](./LICENSE)文件。原始作者保留Apache 2.0许可未明确授予的所有权利。

@@ -19,6 +19,4 @@ English| [简体中文](./README-zh.md)
 - [@wpxp123456](https://github.com/wpxp123456)
 
 ## License
-[MIT](http://opensource.org/licenses/MIT)
-
-Copyright (c) 2020-present, mengshukeji
+Please consult the attached [LICENSE](./LICENSE) file for details. All rights not explicitly granted by the Apache 2.0 License are reserved by the Original Author.
