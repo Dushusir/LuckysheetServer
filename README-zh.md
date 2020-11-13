@@ -15,7 +15,7 @@
 ## 贡献者和感谢
 
 ### 团队
-- [@wbfsa](https://github.com/wbfsa)
+- [@iamxuchen800117](https://github.com/iamxuchen800117)
 - [@wpxp123456](https://github.com/wpxp123456)
 
 ## 版权信息
