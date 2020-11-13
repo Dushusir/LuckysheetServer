@@ -1736,27 +1736,6 @@ public class PostgresJfGridUpdateService {
             if (!_result) {
                 return "更新失败";
             }
-//            //设置当前文档status
-//            Query query=new Query();
-//            query.addCriteria(Criteria.where("_id").is(gridKey));
-//            Update update=new Update();
-//            Integer _total=JfGridFileUtil.getSheetCount(_dbObject);
-//            if(_total!=null){
-//                //设置全部status=0
-//                for(int x=0;x<_total;x++){
-//                    if(x==_sheetPosition.intValue()){
-//                        continue;//取消隐藏的不处理
-//                    }
-//                    update.set("jfgridfile."+x+".status",0);
-//                }
-//            }
-//            //设置当前文档
-//            update.set("jfgridfile."+_sheetPosition+".status",1);
-//            boolean _result=jfGridFileDao.updateOne(query,update);
-//            if(!_result){
-//                return "更新失败";
-//            }
-
 
             TuGridModel models = new TuGridModel();
             //model.setMongodbkey(gridKey.toString());

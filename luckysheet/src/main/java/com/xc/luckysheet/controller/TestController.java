@@ -5,7 +5,6 @@ import com.mongodb.util.JSON;
 import com.xc.common.api.ResponseVO;
 import com.xc.common.config.redis.RedisCacheService;
 import com.xc.common.utils.JsonUtil;
-import com.xc.common.utils.RandomUtil;
 import com.xc.luckysheet.dao.TestPostgreDao;
 import com.xc.luckysheet.entity.PgGridDataModel;
 import com.xc.luckysheet.entity.Test;
@@ -70,7 +69,6 @@ public class TestController {
         Map<String,String> map=new HashMap<>();
         map.put("threadName",Thread.currentThread().getName());
         map.put("SUCCESS","true");
-        map.put("random", RandomUtil.getRandom()+"");
         map.put("param",param);
 
         log.info(JsonUtil.toJson(map));

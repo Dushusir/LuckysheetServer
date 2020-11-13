@@ -29,7 +29,11 @@ public class PostgresGridFileGetService {
     private GridFileRedisCacheService redisService;
 
 
-    //1.3.3	获取表格数据 按gridKey获取,默认载入status为1
+    /**
+     * 1.3.3	获取表格数据 按gridKey获取,默认载入status为1
+     * @param gridKey
+     * @return
+     */
     public List<DBObject> getDefaultByGridKey(String gridKey){
         String i=pgGridFileDao.getFirstBlockIndexByGridKey(gridKey);
         redisService.raddFlagContent(gridKey+i, true);
@@ -62,7 +66,12 @@ public class PostgresGridFileGetService {
         return dbObject;
     }
 
-    //按list_id获取，返回指定sheet 当前sheet的全部分块数据（并合并）
+    /**
+     * 按list_id获取，返回指定sheet 当前sheet的全部分块数据（并合并）
+     * @param gridKey
+     * @param index
+     * @return
+     */
     public BasicDBList getCelldataBlockMergeByGridKey(String gridKey,String index){
         //每一个分块数据合并后的对象
         BasicDBList _celldata=new BasicDBList();
@@ -87,12 +96,22 @@ public class PostgresGridFileGetService {
         return _celldata;
     }
 
-    //按list_id获取，返回指定sheet分块组
+    /**
+     * 按list_id获取，返回指定sheet分块组
+     * @param list_id
+     * @param index
+     * @return
+     */
     public List<DBObject> getBlocksByGridKey(String list_id,String index){
         return pgGridFileDao.getBlockAllByGridKey(list_id, index);
     }
 
-    //1.3.4	获取sheet数据  参数为gridKey（表格主键） 和 index（sheet主键合集
+    /**
+     * 1.3.4	获取sheet数据  参数为gridKey（表格主键） 和 index（sheet主键合集
+     * @param gridKey
+     * @param indexs
+     * @return
+     */
     public LinkedHashMap getByGridKeys(String gridKey, List<String> indexs){
         LinkedHashMap _resultModel=null;
         if(indexs==null || indexs.size()==0){
