@@ -108,31 +108,5 @@ public class TestController {
         }
     }
 
-    ////////////////////
-
-    //postgre添加记录
-    @ApiOperation(value = "postgre添加sheet记录",notes = "postgre添加sheet记录")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "list_id", value = "list_id", paramType = "query", required = true, dataType = "String")
-    })
-    @GetMapping("postgre/sheet/add")
-    public ResponseVO postgreSheetAdd(String list_id){
-        //初始化对象
-        String strSheet="{\"name\":\"Sheet1\",\"color\":\"\",\"index\":0,\"chart\":[],\"status\":1,\"order\":0,\"column\":60,\"row\":84,\"celldata\":[{\"c\":1,\"r\":1,\"v\":\"v1\"},{\"c\":1,\"r\":2,\"v\":\"v2\"},{\"c\":1,\"r\":3,\"v\":\"v3\"},{\"c\":1,\"r\":4,\"v\":\"v4\"}],\"visibledatarow\":[],\"visibledatacolumn\":[],\"rowsplit\":[],\"ch_width\":4748,\"rh_height\":1790,\"jfgird_select_save\":{},\"jfgrid_selection_range\":{},\"scrollLeft\":0,\"scrollTop\":0,\"config\":{}}";
-        DBObject bson=(DBObject) JSON.parse(strSheet);
-
-        PgGridDataModel model=new PgGridDataModel();
-        model.setBlock_id("block_id");
-        model.setIndex("1");
-        model.setIs_delete(0);
-        model.setJson_data(bson);
-        model.setStatus(1);
-        model.setOrder(0);
-        model.setList_id(list_id);
-
-        String result=postgresJfGridUpdateService.insert(model);
-
-        return ResponseVO.successInstance(result);
-    }
 
 }
