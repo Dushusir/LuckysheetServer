@@ -1,4 +1,3 @@
-luckysheet    luckysheet_id_seq  luckysheetdb
 创建数据库
 CREATE DATABASE luckysheetdb
 
