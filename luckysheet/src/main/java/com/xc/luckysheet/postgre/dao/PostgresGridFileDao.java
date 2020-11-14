@@ -32,7 +32,14 @@ import java.util.*;
 @Repository
 public class PostgresGridFileDao {
 
-    //默认第一块的编号
+    /**
+     * 表名
+     */
+    private static final String TableName="luckysheet";
+
+    /**
+     * 默认第一块的编号
+     */
     private static String FirstBlockId="";
 
     static {
@@ -53,9 +60,6 @@ public class PostgresGridFileDao {
      * @return
      */
     public String insert(PgGridDataModel pgModel){
-        //String model="{\"name\":\"Sheet1\",\"color\":\"\",\"index\":0,\"chart\":[],\"status\":1,\"order\":0,\"column\":60,\"row\":84,\"celldata\":[],\"visibledatarow\":[],\"visibledatacolumn\":[],\"rowsplit\":[],\"ch_width\":4748,\"rh_height\":1790,\"jfgird_select_save\":{},\"jfgrid_selection_range\":{},\"scrollLeft\":0,\"scrollTop\":0,\"config\":{}}";
-       /* String model="{\"color\":\"\",\"chart\":[],\"order\":0,\"column\":60,\"row\":84,\"celldata\":[{\"c\":1,\"r\":1,\"v\":\"v1\"},{\"c\":1,\"r\":2,\"v\":\"v2\"},{\"c\":1,\"r\":3,\"v\":\"v3\"},{\"c\":1,\"r\":4,\"v\":\"v4\"}],\"visibledatarow\":[],\"visibledatacolumn\":[],\"rowsplit\":[],\"ch_width\":4748,\"rh_height\":1790,\"jfgird_select_save\":{},\"jfgrid_selection_range\":{},\"scrollLeft\":0,\"scrollTop\":0,\"config\":{}}";
-        bson=(DBObject) JSON.parse(model);*/
         DBObject bson=pgModel.getJson_data();
         PGobject pg=new PGobject();
         pg.setType("json");
@@ -66,7 +70,7 @@ public class PostgresGridFileDao {
             log.error(e.getMessage());
         }
 
-        String sql = "insert into quicksheet (id,block_id,index,list_id,status,json_data,\"order\",is_delete) values " +
+        String sql = "insert into "+TableName+" (id,block_id,index,list_id,status,json_data,\"order\",is_delete) values " +
                 " (nextval('mytable_myid_seq'),?,?,?,?,?,?,0)";
         try{
             jdbcTemplate_postgresql.update(sql,pgModel.getBlock_id().trim(),pgModel.getIndex(),pgModel.getList_id(),pgModel.getStatus(),pg,pgModel.getOrder());
@@ -91,7 +95,7 @@ public class PostgresGridFileDao {
         }
 
 
-        String sql = "insert into quicksheet (id,block_id,index,list_id,status,json_data) values " +
+        String sql = "insert into "+TableName+" (id,block_id,index,list_id,status,json_data) values " +
                 " (?,?,?,?,?,?)";
         try{
             long l=getMaxId()+1;
@@ -126,7 +130,7 @@ public class PostgresGridFileDao {
             log.error(e.getMessage());
         }
 
-        String sql = "insert into quicksheet (id,block_id,index,list_id,status,json_data) values " +
+        String sql = "insert into "+TableName+" (id,block_id,index,list_id,status,json_data) values " +
                 " (?,?,?,?,?,?)";
         try{
             long l=getMaxId()+1;
@@ -139,7 +143,7 @@ public class PostgresGridFileDao {
     }
 
     private long getMaxId(){
-        String sql="select max(id) from quicksheet ";
+        String sql="select max(id) from "+TableName;
         try{
             return jdbcTemplate_postgresql.queryForObject(sql,new Object[]{},Long.class);
         }catch (Exception e){
@@ -151,7 +155,7 @@ public class PostgresGridFileDao {
     //查看第一块是否存在（控制块）
     public Integer getFirstBlockByGridKey(String gridKey,String index){
         //默认获取第一块
-        String sql="select count(1) from quicksheet p where p.block_id='fblock' and p.list_id=? and p.index=? ";
+        String sql="select count(1) from "+TableName+" p where p.block_id='fblock' and p.list_id=? and p.index=? ";
         try{
 
             return  jdbcTemplate_postgresql.queryForObject(sql, new Object[]{gridKey,index},Integer.class);
@@ -164,7 +168,7 @@ public class PostgresGridFileDao {
     //查看第一块是否存在（控制块）
     public String getFirstBlockIndexByGridKey(String gridKey){
         //默认获取第一块
-        String sql="select p.index from quicksheet p where p.block_id='fblock' and p.list_id=? and p.status=1 ";
+        String sql="select p.index from "+TableName+" p where p.block_id='fblock' and p.list_id=? and p.status=1 ";
         try{
 
             return  jdbcTemplate_postgresql.queryForObject(sql, new Object[]{gridKey},String.class);
@@ -182,7 +186,7 @@ public class PostgresGridFileDao {
      * @return
      */
     public String InsertIntoBatch(List<PgGridDataModel> models){
-        String sql = "insert into quicksheet (id,block_id,index,list_id,status,\"order\",json_data,is_delete) values " +
+        String sql = "insert into "+TableName+" (id,block_id,index,list_id,status,\"order\",json_data,is_delete) values " +
                 " (nextval('mytable_myid_seq'),?,?,?,?,?,?,0)";
         List<Object[]>batch=new ArrayList<Object[]>();
         for(PgGridDataModel b : models){
@@ -226,7 +230,7 @@ public class PostgresGridFileDao {
      */
     public List<DBObject> getByGridKey_NOCelldata(String gridKey){
         try{
-            String sql="select id,block_id,index,list_id,status,json_data-'celldata' AS json_data,\"order\" from quicksheet p where p.block_id='fblock' and p.list_id=? and p.is_delete=0";
+            String sql="select id,block_id,index,list_id,status,json_data-'celldata' AS json_data,\"order\" from "+TableName+" p where p.block_id='fblock' and p.list_id=? and p.is_delete=0";
             List<Map<String, Object>> list=jdbcTemplate_postgresql.queryForList(sql, new Object[]{gridKey});
             List<DBObject> result=new ArrayList<DBObject>();
 
@@ -269,8 +273,7 @@ public class PostgresGridFileDao {
                 updateResult=updateResult+"\""+key+"\""+":"+updateDB.get(key).toString()+",";
             }
             updateResult=updateResult.substring(0, updateResult.length()-1);
-            //update quicksheet set jsonb_v=jsonb_v||'{"address":"上海浦东"}'::jsonb where id=35;
-            String updateSql="update quicksheet set json_data=json_data||'{"+updateResult+"}' where 1=1 " +condition;
+            String updateSql="update "+TableName+" set json_data=json_data||'{"+updateResult+"}' where 1=1 " +condition;
             log.info("updateSql:"+updateSql);
             jdbcTemplate_postgresql.update(updateSql);
             return true;
@@ -289,8 +292,7 @@ public class PostgresGridFileDao {
             for (String key : queryDB.keySet()) {
                 condition=condition+"and "+key+"='"+queryDB.get(key)+"'";
             }
-            //update quicksheet set jsonb_v= jsonb_set(jsonb_v,'{myinfo,celldata,0,v,con}'::text[],'"new str"',true) where id=35;;
-            String updateSql="update quicksheet set json_data=json_data #- '{"+keyName+"}'  where 1=1 " +condition;
+            String updateSql="update "+TableName+" set json_data=json_data #- '{"+keyName+"}'  where 1=1 " +condition;
             log.info("rmCellDataValue--"+updateSql);
             jdbcTemplate_postgresql.update(updateSql);
             return true;
@@ -312,9 +314,8 @@ public class PostgresGridFileDao {
             if(position!=null){
                 keyName=keyName+","+position;
             }
-            //update quicksheet set jsonb_v= jsonb_set(jsonb_v,'{myinfo,celldata,0,v,con}'::text[],'"new str"',true) where id=35;;
             StringBuffer updateSql=new StringBuffer();
-            updateSql.append("update quicksheet set json_data=jsonb_set(json_data,'{"+keyName);
+            updateSql.append("update "+TableName+" set json_data=jsonb_set(json_data,'{"+keyName);
             updateSql.append("}'::text[],'"+v+"',true) where 1=1 "+condition);
 
             jdbcTemplate_postgresql.update(updateSql.toString());
@@ -337,9 +338,8 @@ public class PostgresGridFileDao {
             if(position!=null){
                 keyName=keyName+","+position;
             }
-            //update quicksheet set jsonb_v= jsonb_set(jsonb_v,'{myinfo,celldata,0,v,con}'::text[],'"new str"',true) where id=35;;
             StringBuffer updateSql=new StringBuffer();
-            updateSql.append("update quicksheet set json_data=jsonb_set(json_data,'{"+keyName);
+            updateSql.append("update "+TableName+" set json_data=jsonb_set(json_data,'{"+keyName);
             updateSql.append("}','"+v+"',true) where 1=1 "+condition);
             log.info("updateSql:"+updateSql);
             jdbcTemplate_postgresql.update(updateSql.toString());
@@ -369,14 +369,14 @@ public class PostgresGridFileDao {
                     paramter.add(queryDB.get(key));
                     condition=condition+" and "+key+"=? ";
                 }
-                String sql="select json_data from quicksheet p where 1=1"+condition;
+                String sql="select json_data from "+TableName+" p where 1=1"+condition;
                 Map<String, Object> map=jdbcTemplate_postgresql.queryForMap(sql, paramters.toArray());
                 db=(DBObject) JSONParse.parse(map.get("json_data").toString());
                 if(db!=null && condition!=null){
                     db.putAll(update.getQueryObject());
                 }
                 paramter.add(0, db);
-                String updateSql="update quicksheet set json_data=? where 1=1 " +condition;
+                String updateSql="update "+TableName+" set json_data=? where 1=1 " +condition;
                 jdbcTemplate_postgresql.update(updateSql,paramter.toArray());
             }
             return true;
@@ -389,7 +389,7 @@ public class PostgresGridFileDao {
     //按list_id获取，返回sheet集合
     public List<DBObject> getBlockAllByGridKey(String list_id,String index){
         try{
-            String sql="select * from quicksheet p where  p.list_id=? and p.index =? order by p.order asc";
+            String sql="select * from "+TableName+" p where  p.list_id=? and p.index =? order by p.order asc";
             List<Map<String, Object>> list=jdbcTemplate_postgresql.queryForList(sql, new Object[]{list_id,index});
             List<DBObject> result=new ArrayList<DBObject>();
             for (Map<String, Object> map : list) {
@@ -406,7 +406,7 @@ public class PostgresGridFileDao {
     //按list_id获取，返回sheet集合
     public List<PgGridDataModel> getByGridKey(String list_id){
         try{
-            String sql="select * from quicksheet p where p.block_id='fblock' and p.list_id=? ";
+            String sql="select * from "+TableName+" p where p.block_id='fblock' and p.list_id=? ";
             List<PgGridDataModel> list=jdbcTemplate_postgresql.query(sql, new Object[]{list_id},modelRowMapper);
             return list;
         }catch (Exception e){
@@ -436,7 +436,7 @@ public class PostgresGridFileDao {
     public DBObject getCelldataByGridKey(String gridKey,String index,String block_id){
         try{
 
-            String sql="select index,json_data->>'celldata' AS celldata,json_data->>'column' AS column,json_data->>'row' AS row from quicksheet p where  p.block_id='"+block_id+"' and p.list_id=? and p.index=? ORDER BY p.id DESC LIMIT 1 ";
+            String sql="select index,json_data->>'celldata' AS celldata,json_data->>'column' AS column,json_data->>'row' AS row from "+TableName+" p where  p.block_id='"+block_id+"' and p.list_id=? and p.index=? ORDER BY p.id DESC LIMIT 1 ";
             Map<String, Object> map=jdbcTemplate_postgresql.queryForMap(sql, new Object[]{gridKey,index});
             DBObject db=new BasicDBObject();
 
@@ -464,7 +464,7 @@ public class PostgresGridFileDao {
     public List<DBObject> getBlocksByGridKey(String gridKey,String index){
         try{
 
-            String sql="select list_id,block_id,index,json_data->>'celldata' AS celldata,json_data->>'column' AS column,json_data->>'row' AS row from quicksheet p where p.list_id=? and p.index=?";
+            String sql="select list_id,block_id,index,json_data->>'celldata' AS celldata,json_data->>'column' AS column,json_data->>'row' AS row from "+TableName+" p where p.list_id=? and p.index=?";
             List<Map<String, Object>> list=jdbcTemplate_postgresql.queryForList(sql, new Object[]{gridKey,index});
             List<DBObject> result=new ArrayList<DBObject>();
 
@@ -496,7 +496,7 @@ public class PostgresGridFileDao {
     public DBObject getCelldataByGridKey(String gridKey){
         try{
 
-            String sql="select index,json_data->>'celldata' AS celldata,json_data->>'column' AS column,json_data->>'row' AS row from quicksheet p where   p.id =? ";
+            String sql="select index,json_data->>'celldata' AS celldata,json_data->>'column' AS column,json_data->>'row' AS row from "+TableName+" p where   p.id =? ";
             Map<String, Object> map=jdbcTemplate_postgresql.queryForMap(sql, new Object[]{gridKey});
             DBObject db=new BasicDBObject();
 
@@ -525,7 +525,7 @@ public class PostgresGridFileDao {
     //删除文档
     public String delDocument(String id){
         try{
-            String delsql="DELETE from quicksheet where id=? ";
+            String delsql="DELETE from "+TableName+" where id=? ";
             jdbcTemplate_postgresql.update(delsql,new Object[]{id});
             return "";
         }catch (Exception ex){
@@ -543,7 +543,7 @@ public class PostgresGridFileDao {
                 id=id+str+",";
             }
             id=id.substring(0, id.length()-1);
-            String delsql="DELETE from quicksheet where id in ("+id+")";
+            String delsql="DELETE from "+TableName+" where id in ("+id+")";
             jdbcTemplate_postgresql.update(delsql);
             return "";
         }catch (Exception ex){
@@ -555,7 +555,7 @@ public class PostgresGridFileDao {
     //删除多个文档
     public String delDocumentsByDel(){
         try{
-            String delsql="DELETE from quicksheet where is_delete=1";
+            String delsql="DELETE from "+TableName+" where is_delete=1";
             jdbcTemplate_postgresql.update(delsql);
             return "";
         }catch (Exception ex){
@@ -564,7 +564,7 @@ public class PostgresGridFileDao {
         }
     }
     public String delByGridKeys(List<String> ids) {
-        String delsql="DELETE from quicksheet where list_id in (?)";
+        String delsql="DELETE from "+TableName+" where list_id in (?)";
         jdbcTemplate_postgresql.update(delsql,ids.toArray());
         return "";
     }
@@ -573,7 +573,7 @@ public class PostgresGridFileDao {
     //按gridKey获取，返回sheet集合
     public DBObject getByPgId(ObjectId gridKey){
         try{
-            String sql="select * from quicksheet p where and p.id=? ";
+            String sql="select * from "+TableName+" p where and p.id=? ";
             Map<String, Object> map=jdbcTemplate_postgresql.queryForMap(sql, new Object[]{gridKey});
             return getDBObjectFromMap(map);
         }catch (Exception e){
@@ -584,7 +584,7 @@ public class PostgresGridFileDao {
 
     //查看第一块是否存在（控制块）
     public String getKeyByGridKeyAndIndex(String gridKey,String index,String block_id){
-        String sql="select id from quicksheet p where p.list_id=? and p.index=? and p.block_id=?";
+        String sql="select id from "+TableName+" p where p.list_id=? and p.index=? and p.block_id=?";
         try{
 
             return  jdbcTemplate_postgresql.queryForObject(sql, new Object[]{gridKey,index,block_id},String.class);
@@ -609,7 +609,7 @@ public class PostgresGridFileDao {
                 condition=condition+"and "+key+"=? ";
             }
             //(jsonb_v,'{myinfo,celldata,0}','{"c":1,"r":1,"v":{"con":"str"}}',false)
-            String updateSql="update quicksheet set json_data=jsonb_insert(json_data,'{"+word+"}','"+db.toString()+"',false) where 1=1 " +condition;
+            String updateSql="update "+TableName+" set json_data=jsonb_insert(json_data,'{"+word+"}','"+db.toString()+"',false) where 1=1 " +condition;
             log.info("updateSql:"+updateSql);
             jdbcTemplate_postgresql.update(updateSql,arr.toArray());
             return true;
@@ -623,7 +623,7 @@ public class PostgresGridFileDao {
     public DBObject getConfigByGridKey(String gridKey,String index){
         //默认获取第一块
         try{
-            String sql="select index,list_id,json_data->>'config' AS config,json_data->>'calcChain' AS calcChain,json_data->>'filter' AS filter from quicksheet p where p.list_id=? and p.index=? and p.block_id=? ";
+            String sql="select index,list_id,json_data->>'config' AS config,json_data->>'calcChain' AS calcChain,json_data->>'filter' AS filter from "+TableName+" p where p.list_id=? and p.index=? and p.block_id=? ";
             Map<String, Object> map=jdbcTemplate_postgresql.queryForMap(sql, new Object[]{gridKey,index,FirstBlockId});
             DBObject db=new BasicDBObject();
 
@@ -664,7 +664,7 @@ public class PostgresGridFileDao {
                 arr.add(queryDB.get(key));
                 condition=condition+"and "+key+"=? ";
             }
-            String sql="update quicksheet set json_data=json_data||'{"+word+"}'::jsonb where 1=1 "+condition;
+            String sql="update "+TableName+" set json_data=json_data||'{"+word+"}'::jsonb where 1=1 "+condition;
             log.info("updateSql:"+sql);
             jdbcTemplate_postgresql.update(sql,arr.toArray());
             return true;
@@ -685,7 +685,7 @@ public class PostgresGridFileDao {
                 arr.add(queryDB.get(key));
                 condition=condition+"and "+key+"=? ";
             }
-            String sql="update quicksheet set json_data=json_data||'"+word.toString()+"'::jsonb where 1=1 "+condition;
+            String sql="update "+TableName+" set json_data=json_data||'"+word.toString()+"'::jsonb where 1=1 "+condition;
             log.info("updateSql:"+sql);
             jdbcTemplate_postgresql.update(sql,arr.toArray());
             return true;
@@ -747,7 +747,7 @@ public class PostgresGridFileDao {
     //添加jsonb
     //批量添加
     public String InsertBatchDb(List<DBObject>models){
-        String sql = "insert into quicksheet (id,block_id,index,list_id,status,\"order\",json_data,is_delete) values " +
+        String sql = "insert into "+TableName+" (id,block_id,index,list_id,status,\"order\",json_data,is_delete) values " +
                 " (nextval('mytable_myid_seq'),?,?,?,?,?,?,0)";
         List<Object[]>batch=new ArrayList<Object[]>();
         int order=0;
@@ -808,7 +808,7 @@ public class PostgresGridFileDao {
             if(flag){
                 condition=condition+"and block_id='fblock'";
             }
-            String sql="select id,index from quicksheet p where  p.list_id=? "+condition;
+            String sql="select id,index from "+TableName+" p where  p.list_id=? "+condition;
             List<Map<String, Object>> list=jdbcTemplate_postgresql.queryForList(sql, new Object[]{list_id});
             List<DBObject> result=new ArrayList<DBObject>();
             for (Map<String, Object> map : list) {
@@ -824,7 +824,7 @@ public class PostgresGridFileDao {
 
     public boolean  batchUpdateForNoJsonbData(List<PgGridDataModel> models){
         try{
-            String sql="update quicksheet set \"order\"=?  where  list_id=? and index=? and block_id=?";
+            String sql="update "+TableName+" set \"order\"=?  where  list_id=? and index=? and block_id=?";
             log.info("batchUpdateForNoJsonbData:"+sql);
             jdbcTemplate_postgresql.batchUpdate(sql, new BatchPreparedStatementSetter() {
                 public int getBatchSize() {
@@ -850,11 +850,11 @@ public class PostgresGridFileDao {
     public boolean  updateDataStatus(PgGridDataModel model){
         try{
 
-            String sql1="update quicksheet set status=0  where  list_id=? and status=1 and block_id=?";
+            String sql1="update "+TableName+" set status=0  where  list_id=? and status=1 and block_id=?";
             log.info("updateSql1:"+sql1);
             jdbcTemplate_postgresql.update(sql1,new Object[]{model.getList_id(),model.getBlock_id()});
 
-            String sql2="update quicksheet set status=1  where  list_id=? and index=? and block_id=?";
+            String sql2="update "+TableName+" set status=1  where  list_id=? and index=? and block_id=?";
             log.info("updateSql2:"+sql2);
             jdbcTemplate_postgresql.update(sql2,new Object[]{model.getList_id(),model.getIndex(),model.getBlock_id()});
             return true;
@@ -867,12 +867,10 @@ public class PostgresGridFileDao {
     @Transactional("txPostgresqlManager")
     public boolean  updateDataMsgHide(PgGridDataModel model,Integer hide,String index1,String index2){
         try{
-            String sql1="update quicksheet set status=0 ,json_data=jsonb_set(json_data,'{hide}'::text[],'"+hide+"',true) where  list_id='"+model.getList_id()+"' and index='"+index1+"' and block_id='fblock'";
-            //String sql1="update quicksheet set status=0 ,json_data=jsonb_set(json_data,'{hide}'::text[],"+hide+",true) where  list_id=? and index=? and block_id=?";
+            String sql1="update "+TableName+" set status=0 ,json_data=jsonb_set(json_data,'{hide}'::text[],'"+hide+"',true) where  list_id='"+model.getList_id()+"' and index='"+index1+"' and block_id='fblock'";
             log.info("updateSql1:"+sql1);
-            //jdbcTemplate_postgresql.update(sql1,new Object[]{hide,model.getList_id(),index1,model.getBlock_id()});
             jdbcTemplate_postgresql.update(sql1);
-            String sql2="update quicksheet set status=1  where  list_id=? and index=? and block_id=?";
+            String sql2="update "+TableName+" set status=1  where  list_id=? and index=? and block_id=?";
             log.info("updateSql2:"+sql2);
             jdbcTemplate_postgresql.update(sql2,new Object[]{model.getList_id(),index2,model.getBlock_id()});
             return true;
@@ -886,11 +884,11 @@ public class PostgresGridFileDao {
     public boolean  updateDataMsgNoHide(PgGridDataModel model,Integer hide,String index){
         try{
 
-            String sql1="update quicksheet set status=0  where  list_id=?  and block_id=?";
+            String sql1="update "+TableName+" set status=0  where  list_id=?  and block_id=?";
             log.info("updateSql1:"+sql1);
             jdbcTemplate_postgresql.update(sql1,new Object[]{model.getList_id(),model.getBlock_id()});
 
-            String sql2="update quicksheet set status=1 ,json_data=jsonb_set(json_data,'{hide}'::text[],'"+hide+"',true) where  list_id='"+model.getList_id()+"' and index='"+index+"' and block_id='"+model.getBlock_id()+"'";
+            String sql2="update "+TableName+" set status=1 ,json_data=jsonb_set(json_data,'{hide}'::text[],'"+hide+"',true) where  list_id='"+model.getList_id()+"' and index='"+index+"' and block_id='"+model.getBlock_id()+"'";
             log.info("updateSql2:"+sql2);
             jdbcTemplate_postgresql.update(sql2);
             return true;
@@ -902,7 +900,7 @@ public class PostgresGridFileDao {
     public List<DBObject> getAllIndexsByGridKey(String list_id, List<String> indexs) {
         try{
             StringBuffer sql=new StringBuffer();
-            sql.append("select * from quicksheet p where  p.list_id=? and p.index in (");
+            sql.append("select * from "+TableName+" p where  p.list_id=? and p.index in (");
             String mockInStatement="";
             int i=0;
             for (String type: indexs){
@@ -932,7 +930,7 @@ public class PostgresGridFileDao {
     public List<DBObject> getIndexsByGridKey(String list_id, String indexs) {
         try{
             StringBuffer sql=new StringBuffer();
-            sql.append("select * from quicksheet p where  p.list_id=? and p.index =? order by p.id asc ");
+            sql.append("select * from "+TableName+" p where  p.list_id=? and p.index =? order by p.id asc ");
             List<Map<String, Object>> list=jdbcTemplate_postgresql.queryForList(sql.toString(), new Object[]{list_id,indexs});
             List<DBObject> result=new ArrayList<DBObject>();
             for (Map<String, Object> map : list) {
@@ -977,7 +975,7 @@ public class PostgresGridFileDao {
     public DBObject getChartByGridKey(String gridKey2, String i) {
         //默认获取第一块
         try{
-            String sql="select index,list_id,json_data->>'chart' AS chart,block_id from quicksheet p where p.list_id=? and p.index=? and p.block_id=? ";
+            String sql="select index,list_id,json_data->>'chart' AS chart,block_id from "+TableName+" p where p.list_id=? and p.index=? and p.block_id=? ";
             Map<String, Object> map=jdbcTemplate_postgresql.queryForMap(sql, new Object[]{gridKey2,i,FirstBlockId});
             DBObject db=new BasicDBObject();
 
@@ -1010,7 +1008,7 @@ public class PostgresGridFileDao {
     public boolean  updateDataForReDel(PgGridDataModel model){
         try{
 
-            String sql1="update quicksheet  set is_delete=?  where  list_id=? and index=? ";
+            String sql1="update "+TableName+"  set is_delete=?  where  list_id=? and index=? ";
             log.info("updateSql1:"+sql1);
             jdbcTemplate_postgresql.update(sql1,new Object[]{model.getIs_delete(),model.getList_id(),model.getIndex()});
             return true;
@@ -1029,10 +1027,9 @@ public class PostgresGridFileDao {
             }
             id=id.substring(0, id.length()-1);
             log.info("id:"+id);
-            //update quicksheet set jsonb_v= jsonb_set(jsonb_v,'{myinfo,celldata,0,v,con}'::text[],'"new str"',true) where id=35;;
-            String delsql="DELETE from quicksheet where list_id=? and block_id in ("+id+") and index=? ";
+            String delsql="DELETE from "+TableName+" where list_id=? and block_id in ("+id+") and index=? ";
             jdbcTemplate_postgresql.update(delsql,new Object[]{models.get(0).getList_id(),models.get(0).getIndex()});
-            String sql = "insert into quicksheet (id,block_id,index,list_id,status,\"order\",json_data,is_delete) values " +
+            String sql = "insert into "+TableName+" (id,block_id,index,list_id,status,\"order\",json_data,is_delete) values " +
                     " (nextval('mytable_myid_seq'),?,?,?,?,?,?,0)";
             List<Object[]>batch=new ArrayList<Object[]>();
             for(PgGridDataModel b : models){
@@ -1059,30 +1056,7 @@ public class PostgresGridFileDao {
             jdbcTemplate_postgresql.batchUpdate(sql,batch);
             log.info("batchUpdateCellDataValue--end");
             return true;
-        	/*updateSql.append("update quicksheet set json_data=?");
-        	updateSql.append(" where list_id=? and index=? and block_id=?");
-        	logger.info("updateSql:"+updateSql+"models:"+models.size()+models.get(0).getJson_data());
-        	jdbcTemplate_postgresql.batchUpdate(updateSql.toString(), new BatchPreparedStatementSetter() {
-                public int getBatchSize() {
-                    return models.size();
-                    //这个方法设定更新记录数，通常List里面存放的都是我们要更新的，所以返回list.size();
-                }
-                public void setValues(PreparedStatement ps, int i)throws SQLException {
-                	PGobject pg=new PGobject();
-                	PgGridDataModel linkset =  models.get(i);
-                    pg.setType("json");
-                    try {
-                        pg.setValue(new Gson().toJson(linkset.getJson_data()));
-                    } catch (SQLException e) {
-                        logger.error(e.getMessage());
-                    }
 
-                	ps.setObject(1, pg);
-                    ps.setString(2, linkset.getList_id());
-                    ps.setString(3, linkset.getIndex());
-                    ps.setString(4, linkset.getBlock_id());
-                }
-            });*/
 
         }catch (Exception ex){
             log.error(ex.getMessage());
@@ -1093,9 +1067,8 @@ public class PostgresGridFileDao {
     public boolean testUpdate(){
         String condition="";
         try{
-            //update quicksheet set jsonb_v= jsonb_set(jsonb_v,'{myinfo,celldata,0,v,con}'::text[],'"new str"',true) where id=35;;
             StringBuffer updateSql=new StringBuffer();
-            updateSql.append("update quicksheet set status=0 ,json_data=jsonb_set(json_data,'{hide}'::text[],'1',true) where  list_id='9783810#9488#1685fa3d441a454d9f521409ebdb8cf3' and index='Sheet_e1aelleeG8oW_1553673432973' and block_id='fblock'");
+            updateSql.append("update "+TableName+" set status=0 ,json_data=jsonb_set(json_data,'{hide}'::text[],'1',true) where  list_id='9783810#9488#1685fa3d441a454d9f521409ebdb8cf3' and index='Sheet_e1aelleeG8oW_1553673432973' and block_id='fblock'");
 
             jdbcTemplate_postgresql.update(updateSql.toString());
             return true;
@@ -1117,14 +1090,14 @@ public class PostgresGridFileDao {
                 arr.add(queryDB.get(key));
                 condition=condition+"and "+key+"=? ";
             }
-            String createSql="update quicksheet set json_data=json_data||'{"+words+"}'::jsonb where 1=1 " +condition;
+            String createSql="update "+TableName+" set json_data=json_data||'{"+words+"}'::jsonb where 1=1 " +condition;
             log.info("createSql:"+createSql);
             jdbcTemplate_postgresql.update(createSql,arr.toArray());
             if(position!=null){
                 word=word+","+position;
             }
             //(jsonb_v,'{myinfo,celldata,0}','{"c":1,"r":1,"v":{"con":"str"}}',false)
-            String updateSql="update quicksheet set json_data=jsonb_insert(json_data,'{"+word+"}','"+db.toString()+"',false) where 1=1 " +condition;
+            String updateSql="update "+TableName+" set json_data=jsonb_insert(json_data,'{"+word+"}','"+db.toString()+"',false) where 1=1 " +condition;
             log.info("updateSql:"+updateSql);
             jdbcTemplate_postgresql.update(updateSql,arr.toArray());
             return true;
@@ -1147,14 +1120,14 @@ public class PostgresGridFileDao {
                 condition=condition+"and "+key+"=? ";
             }
             log.info("arr:"+arr);
-            String createSql="update quicksheet set json_data=jsonb_set(json_data,'{"+word+"}'::text[],'[]',true)  where 1=1 " +condition;
+            String createSql="update "+TableName+" set json_data=jsonb_set(json_data,'{"+word+"}'::text[],'[]',true)  where 1=1 " +condition;
             log.info("createSql:"+createSql);
             jdbcTemplate_postgresql.update(createSql,arr.toArray());
             if(position!=null){
                 word=word+","+position;
             }
             //(jsonb_v,'{myinfo,celldata,0}','{"c":1,"r":1,"v":{"con":"str"}}',false)
-            String updateSql="update quicksheet set json_data=jsonb_set(json_data,'{"+word+"}'::text[],'"+db.toString()+"',true) where 1=1 " +condition;
+            String updateSql="update "+TableName+" set json_data=jsonb_set(json_data,'{"+word+"}'::text[],'"+db.toString()+"',true) where 1=1 " +condition;
             log.info("updateSql:"+updateSql);
             jdbcTemplate_postgresql.update(updateSql,arr.toArray());
             return true;
@@ -1184,14 +1157,14 @@ public class PostgresGridFileDao {
                 arr.add(queryDB.get(key));
                 condition=condition+"and "+key+"=? ";
             }
-            String createSql="update quicksheet set json_data=json_data||'{"+words+"}'::jsonb where 1=1 " +condition;
+            String createSql="update "+TableName+" set json_data=json_data||'{"+words+"}'::jsonb where 1=1 " +condition;
             log.info("createSql:"+createSql);
             jdbcTemplate_postgresql.update(createSql,arr.toArray());
             if(position!=null){
                 word=word+","+position;
             }
             //(jsonb_v,'{myinfo,celldata,0}','{"c":1,"r":1,"v":{"con":"str"}}',false)
-            String updateSql="update quicksheet set json_data=jsonb_set(json_data,'{"+word+"}','"+db.toString()+"',false) where 1=1 " +condition;
+            String updateSql="update "+TableName+" set json_data=jsonb_set(json_data,'{"+word+"}','"+db.toString()+"',false) where 1=1 " +condition;
             log.info("updateSql:"+updateSql);
             jdbcTemplate_postgresql.update(updateSql,arr.toArray());
             return true;
