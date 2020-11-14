@@ -27,15 +27,4 @@ public class JdbcTempleConfig {
         return new JdbcTemplate(postgreDataSource);
     }
 
-
-    /**
-     * mysql数据源
-     */
-    @Resource(name = "masterDataSource")
-    private DataSource masterDataSource;
-
-    @Bean(name="mysqlJdbcTemplate")
-    public JdbcTemplate createMySqlJdbcTemplate(){
-        return new JdbcTemplate(masterDataSource);
-    }
 }

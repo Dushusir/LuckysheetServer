@@ -13,12 +13,8 @@ import com.xc.luckysheet.entity.enummodel.SheetOperationEnum;
 import com.xc.luckysheet.postgre.dao.PostgresGridFileDao;
 import com.xc.luckysheet.redisserver.GridFileRedisCacheService;
 import com.xc.luckysheet.redisserver.RedisLock;
-import com.xc.luckysheet.service.ConfigerService;
-import com.xc.luckysheet.service.TuGridService;
 import com.xc.luckysheet.utils.*;
-import io.netty.util.internal.StringUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -38,9 +34,6 @@ public class PostgresJfGridUpdateService {
 
     @Autowired
     private PostgresGridFileDao pgGridFileDao;
-
-    @Autowired
-    private TuGridService tuGridService;
 
     @Autowired
     private RedisTemplate redisTemplate;
@@ -1553,7 +1546,9 @@ public class PostgresJfGridUpdateService {
             //model.setMongodbkey(gridKey.toString());
             model.setList_id(gridKey);
             model.setGrid_name(v);
-            int i = tuGridService.updateReNameByMongdbKey(model);
+
+            //更新文件名
+            int i = 1;
             if (i == 0) {
                 return "改名失败";
             }
@@ -1615,10 +1610,13 @@ public class PostgresJfGridUpdateService {
             models.setList_id(gridKey);
             models.setGrid_thumb(img.getBytes("UTF-8"));
             log.info("Operation_thumb---updateGridThumbByMongodbKey--start");
-            int i = tuGridService.updateGridThumbByMongodbKey(models);
+
+            //更新缩略图逻辑
+            int i = 1;
             if (i == 0) {
                 return "更新缩略图失败";
             }
+
         } catch (Exception ex) {
             log.error(ex.getMessage());
         }

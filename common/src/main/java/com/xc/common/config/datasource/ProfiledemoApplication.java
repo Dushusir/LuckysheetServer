@@ -22,11 +22,7 @@ import javax.sql.DataSource;
 @Configuration
 public class ProfiledemoApplication implements TransactionManagementConfigurer {
 
-    /**
-     * mysql数据源
-     */
-    @Resource(name = "masterDataSource")
-    private DataSource dataSource;
+
     /**
      * postgre数据源
      */
@@ -34,11 +30,6 @@ public class ProfiledemoApplication implements TransactionManagementConfigurer {
     private DataSource postgreDataSource;
 
 
-
-    @Bean(name = "mysqlTxManager")
-    public PlatformTransactionManager mysqlTxManager() {
-        return new DataSourceTransactionManager(dataSource);
-    }
     @Bean(name = "postgreTxManager")
     public PlatformTransactionManager postgreTxManager() {
         return new DataSourceTransactionManager(postgreDataSource);
@@ -46,7 +37,7 @@ public class ProfiledemoApplication implements TransactionManagementConfigurer {
 
 
 
-    @Resource(name="mysqlTxManager")
+    @Resource(name="postgreTxManager")
     private PlatformTransactionManager txManager;
 
     /**

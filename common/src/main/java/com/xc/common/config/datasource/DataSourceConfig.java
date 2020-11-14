@@ -19,14 +19,6 @@ import javax.sql.DataSource;
 @Slf4j
 public class DataSourceConfig {
 
-    @Primary
-    @Bean(name = "masterDataSource")
-    @ConfigurationProperties(prefix = "db.master.druid")
-    public DataSource masterDataSource(){
-        DataSource master = DataSourceBuilder.create().type(DruidDataSource.class).build();
-        log.debug("数据源master",master);
-        return master;
-    }
     @Bean(name = "postgreDataSource")
     @ConfigurationProperties(prefix = "db.postgre.druid")
     public DataSource postgreDataSource(){
