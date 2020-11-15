@@ -133,7 +133,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
                 if (bson.get("t").equals("mv")) {
                     s = false;
                     map.put("type", 3);
-                    map.put("username", "tpsName" + wsUserModel.getWs().getId());
+                    map.put("username", "testUser-" + wsUserModel.getWs().getId());
                     map.put("id", "tps" + wsUserModel.getWs().getId());
                     if ("0".equals(pgSetUp)) {
                         pgGridUpdateService.Operation_mv(gridKey, bson);

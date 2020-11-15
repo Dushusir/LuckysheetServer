@@ -1173,4 +1173,15 @@ public class PostgresGridFileDao {
             return false;
         }
     }
+
+
+    public int deleteAll(){
+        String sql="delete from "+TableName;
+        try{
+            return jdbcTemplate_postgresql.update(sql,new Object[]{});
+        }catch (Exception e){
+            log.warn(e.getMessage());
+        }
+        return 0;
+    }
 }
