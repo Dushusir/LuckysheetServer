@@ -1,6 +1,6 @@
 # 配置server参数
 server:
-  port: 9003
+  port: 9004
   servlet:
     context-path: /luckysheet
 spring:
