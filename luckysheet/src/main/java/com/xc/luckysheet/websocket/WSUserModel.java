@@ -38,9 +38,14 @@ public class WSUserModel {
      * 文档id
      */
     private String gridKey;
+    /**
+     * 连接的用户名
+     */
+    private String userName;
 
     public WSUserModel(WebSocketSession ws){
         this.id=ws.getId();
+        this.userName="testUser-"+ws.getId();
         if(ws.getAttributes().get(USER_TOKEN)!=null){
             this.token=ws.getAttributes().get(USER_TOKEN).toString();
         }else{

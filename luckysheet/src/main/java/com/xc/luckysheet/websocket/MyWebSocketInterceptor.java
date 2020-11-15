@@ -30,7 +30,7 @@ public class MyWebSocketInterceptor extends HttpSessionHandshakeInterceptor {
         //websocket系统启动连接程序，启动的时候就会把他的session值传过来，放入到websocketsession（websocket的一个内置服务器）里面
         ServletServerHttpRequest servletRequest = (ServletServerHttpRequest) request;
         HttpSession session=servletRequest.getServletRequest().getSession(false);
-        log.info("beforeHandshake--session:"+session);
+        log.info("beforeHandshake--session:{}",session);
         //用户token
         String token =getParam(servletRequest,WSUserModel.USER_TOKEN);
         //文档id
@@ -38,13 +38,11 @@ public class MyWebSocketInterceptor extends HttpSessionHandshakeInterceptor {
         if (null!=token && null!=gridKey) {
         	//验证用户信息
         	String gridKeys=MyURLUtil.urlDecode(gridKey);
-        	log.info("gridKey:"+gridKeys);
-        	
         	String _checkStr=check(gridKeys);
-             log.info(_checkStr);
-             if(_checkStr.length()>0){
-                 return false;
-             }
+            log.info("link gridKey:{};userToken:{};check:{}",gridKeys,token,_checkStr);
+        	if(_checkStr.length()>0){
+        	    return false;
+        	}
             attributes.put(WSUserModel.USER_TOKEN, token);
             attributes.put(WSUserModel.USER_GRIDKEY, gridKey);
         } else {
@@ -57,7 +55,7 @@ public class MyWebSocketInterceptor extends HttpSessionHandshakeInterceptor {
     @Override
     public void afterHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler,
                                Exception exception) {
-    	log.info("exception"+exception);
+    	log.info("exception:{}",exception);
     }
 
 

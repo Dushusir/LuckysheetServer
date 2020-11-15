@@ -119,26 +119,16 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
             String _id = wsUserModel.getGridKey();
             String gridKey = MyURLUtil.urlDecode(_id);
             if (bson != null && !StringUtil.isNullOrEmpty(_id)) {
-        	/*if(!bson.get("t").equals("mv")){
-	        	String i=bson.get("i").toString();
-	            String key=gridKey+i;
-	            key=gridKey+i;
-	            key=gridKey+i;
-	            key=gridKey+i;
-	            Boolean flag=redisService.rgetFlagContent(key);
-	            if(flag){
-	            	 redisService.raddHandlerContent(key, contentReal);
-	            }
-        	}*/
                 if (bson.get("t").equals("mv")) {
+                    //记录光标位置
                     s = false;
                     map.put("type", 3);
-                    map.put("username", "testUser-" + wsUserModel.getWs().getId());
-                    map.put("id", "tps" + wsUserModel.getWs().getId());
+                    map.put("username", wsUserModel.getUserName());
+                    map.put("id", "" + wsUserModel.getWs().getId());
                     if ("0".equals(pgSetUp)) {
                         pgGridUpdateService.Operation_mv(gridKey, bson);
                     } else {
-                        //jfGridFileUpdataService.Operation_mv(gridKey, bson);
+                        //其它实现
                     }
                 } else if (bson.get("t").equals("rv_end")) {
                     //当前sheet的index值
@@ -150,7 +140,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
                     String key = gridKey + wsUserModel.getWs().getId();
                     pgGridUpdateService.getIndexRvForThread(key, bson);
                 } else {
-                    // DBObject _test=(DBObject)JSON.parse(((DBObject)(((BasicDBList) bson).get(0))).get("v").toString());
+                    //其它操作
                     RedisLock redisLock = new RedisLock(redisTemplate, gridKey);
                     try {
                         if (redisLock.lock()) {
@@ -158,13 +148,13 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
                             if ("0".equals(pgSetUp)) {
                                 _str = pgGridUpdateService.handleUpdate(gridKey, bson);
                             } else {
-                                //_str = jfGridFileUpdataService.handleUpdate(gridKey, bson);
+                                //其它实现
                             }
 
                             if (_str.length() == 0) {
 
                             } else {
-                                log.info("handleUpdate--error:" + _str);
+                                log.info("handleUpdate--error:{}" ,_str);
                                 _b = false;
                             }
                         } else {
@@ -172,7 +162,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
                             _b = false;
                         }
                     } catch (Exception e) {
-                        log.error("handleUpdate--:redisLock--error");
+                        log.error("handleUpdate--:redisLock--error:{}",e);
                         _b = false;
                     } finally {
                         redisLock.unlock();
@@ -206,7 +196,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
                 maps.put("status", "1");
                 maps.put("data", contentReal);
             }
-            //只针对发送信息会发送信息用户
+            //只给发送此信息的用户发送信息
             maps.put("returnMessage", returnMessage);
             maps.put("createTime", System.currentTimeMillis());
             maps.put("type", 1);
@@ -214,9 +204,6 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
             sendMessageToUser(session, params);
 
         }
-        //NotificationMessage msg = new Gson().fromJson(message.getPayload().toString(), NotificationMessage.class);
-        //msg.setDate(new Date());
-        //sendMessageToUser(msg.getTo(), new TextMessage(new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create().toJson(msg)));
     }
 
     /**
@@ -224,7 +211,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
      */
     @Override
     public void handleTransportError(WebSocketSession session, Throwable exception) throws Exception {
-        log.error("handleTransportError:" + session + "exception" + exception);
+        log.error("handleTransportError:{};exception:{}" ,session,exception);
         if (session.isOpen()) {
             session.close();
         }
@@ -291,9 +278,9 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
         WSUserModel.webSocketMapRemove(USER_SOCKET_SESSION_MAP, ws);
         subOnlineCount();              //在线数减1
         if (isError) {
-            log.info("窗口关闭(Error):" + ws.getId() + ",当前在线人数为" + getOnlineCount());
+            log.info("窗口关闭(Error):{},当前在线人数为{}" ,ws.getId() ,getOnlineCount());
         } else {
-            log.info("窗口关闭:" + ws.getId() + ",当前在线人数为" + getOnlineCount());
+            log.info("窗口关闭:{},当前在线人数为:{}",ws.getId(),getOnlineCount());
         }
 
     }

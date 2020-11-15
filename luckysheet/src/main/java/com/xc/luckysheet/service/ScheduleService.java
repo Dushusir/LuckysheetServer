@@ -22,7 +22,7 @@ public class ScheduleService {
 
     private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-    @Scheduled(cron = "0/5 * * * * *")
+    @Scheduled(cron = "0 */5 * * * *")
     public void test(){
         System.out.println(format.format(new Date()));
     }

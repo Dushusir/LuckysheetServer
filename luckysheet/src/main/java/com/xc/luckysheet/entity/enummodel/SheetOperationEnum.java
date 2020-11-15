@@ -28,7 +28,7 @@ public enum SheetOperationEnum {
     v,  //3.1	单元格操作v
     rv,//批量单元格操作
     shre,//撤销删除
-	mv;//记录光标位置不存入mongo
+	mv;//记录光标位置不保存
 
 
     public static boolean contains(String _name){
