@@ -31,10 +31,6 @@ public class RedisMessagePublish {
      */
     public boolean publishMessage(RedisMessageModel redisMessageModel){
         try{
-            //String channel=properties.getProperty("redis.channel");
-            //redisTemplate.convertAndSend(channel,new Gson().toJson(redisMessageModel.toDBObject()));
-            //DBObject bson1=(DBObject) JSON.parse(body.toString());
-            //redisTemplate.convertAndSend(channel,redisMessageModel.toDBObject().toString());
             redisTemplate.convertAndSend(channel,new Gson().toJson(redisMessageModel));
             return true;
         }catch (Exception ex){

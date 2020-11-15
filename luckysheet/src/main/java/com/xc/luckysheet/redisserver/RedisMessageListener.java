@@ -34,7 +34,6 @@ public class RedisMessageListener implements MessageListener {
         //System.out.println("消息内容: " + String.valueOf(body));
         RedisMessageModel bson1=new Gson().fromJson(body.toString(),RedisMessageModel.class);
         System.out.println("得到Redis推送消息："+MyStringUtil.getStringShow(bson1.toString()));
-        //WebSocketController.send(bson1.toString());
         MyWebSocketHandler.sendMessageToUserByRedis(bson1);
     }
 

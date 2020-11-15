@@ -95,7 +95,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
             //无消息直接返回
             return;
         }
-        //返回消息类型:0：连接成功，1.发送给发送信息用户，2.发送信息给其他用户，3.发送选区位置信息
+        //返回消息类型type :0：连接成功，1.发送给发送信息用户，2.发送信息给其他用户，3.发送选区位置信息 999、用户连接断开
         Map map = new HashMap<>();
         boolean _b = true;
         boolean s = true;
@@ -190,7 +190,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
                 map.put("data", contentReal);
                 String param = obj.writeValueAsString(map);
                 //消息发送到redis
-                redisMessagePublish.publishMessage(new RedisMessageModel(ipAndPort, wsUserModel.getGridKey(), content));
+                redisMessagePublish.publishMessage(new RedisMessageModel(ipAndPort, wsUserModel.getGridKey(), param));
                 sendMessageToUserByCurrent(wsUserModel, param);
             } else {
                 maps.put("status", "1");
@@ -274,13 +274,27 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
     }
 
     private void closeConn(WebSocketSession session, boolean isError) {
-        WSUserModel ws = new WSUserModel(session);
-        WSUserModel.webSocketMapRemove(USER_SOCKET_SESSION_MAP, ws);
-        subOnlineCount();              //在线数减1
+        WSUserModel wsUserModel = new WSUserModel(session);
+        WSUserModel.webSocketMapRemove(USER_SOCKET_SESSION_MAP, wsUserModel);
+
         if (isError) {
-            log.info("窗口关闭(Error):{},当前在线人数为{}" ,ws.getId() ,getOnlineCount());
+            log.info("窗口关闭(Error):{},当前在线人数为{}" ,wsUserModel.getId() ,getOnlineCount());
         } else {
-            log.info("窗口关闭:{},当前在线人数为:{}",ws.getId(),getOnlineCount());
+            subOnlineCount();              //在线数减1
+            log.info("窗口关闭:{},当前在线人数为:{}",wsUserModel.getId(),getOnlineCount());
+            try{
+                Map map = new HashMap<>(2);
+                map.put("message", "用户退出");
+                map.put("type", 999);
+                map.put("username", wsUserModel.getUserName());
+                map.put("id", "" + wsUserModel.getWs().getId());
+                String param =new ObjectMapper().writeValueAsString(map);
+                //消息发送到redis
+                redisMessagePublish.publishMessage(new RedisMessageModel(ipAndPort, wsUserModel.getGridKey(), param));
+                sendMessageToUserByCurrent(wsUserModel, param);
+            }catch (Exception ex){
+                log.error("用户下线群发失败:{}",ex);
+            }
         }
 
     }
