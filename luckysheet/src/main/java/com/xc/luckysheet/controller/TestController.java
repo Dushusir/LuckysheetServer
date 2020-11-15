@@ -18,8 +18,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * window启动
- * java -jar web-test.jar
+ * jar启动
+ * java -jar luckysheet.jar
  * 测试类
  *
  * http://luckysheet.lashuju.com/demo/qkIndex.html

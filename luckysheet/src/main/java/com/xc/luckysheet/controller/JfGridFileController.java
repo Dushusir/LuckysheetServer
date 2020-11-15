@@ -72,7 +72,7 @@ public class JfGridFileController {
                     //postgre
                     dbObject=pgGridFileGetService.getDefaultByGridKey(gridKey);
                 }else{
-                    //mongo
+                    //其它数据库
                 }
                 if(dbObject!=null){
                     resultStr=JsonUtil.toJson(dbObject);
@@ -158,7 +158,7 @@ public class JfGridFileController {
     }
 
     /**
-     * 修改、读取ajax 如果_ObjectId为空，使用id
+     * 文档权限的检查
      * @param request
      * @param _id
      * @param curmodel
