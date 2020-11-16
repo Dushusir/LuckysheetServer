@@ -19,34 +19,14 @@ import java.util.List;
 @Data
 public class TuGridModel implements BaseModel{
     private String list_id;
-    private String parent_list_id;// 上一级id ，等级为0  ,-1 回收站
 
-    private String grid_name;// '表格名称',
-    private String grid_introduction;// '表格说明',
-    private byte[] grid_thumb;// '缩略图',
-    private Long grid_creator;// '创建人id',
-    private GridTypeEnum grid_type;// '表格类型 表格类型 ;dir 0;tu、1;xls、2;csv、3;xlsx、4;txt、5;
-
-    private String mongodbkey;// 'mongodbkey',
-    private Integer grid_statistic_sheet;// 'sheet数量',
-    private String grid_filepath;// '源文件路径',（此处为 用户id/记录id.文件类型）  路径为 配置/用户id/记录id.文件类型
-
-    private Date grid_create_time;// '创建时间',
-    private Date grid_update_time;// '最后修改时间',
-    private Integer grid_status;// '状态 1正常 -1垃圾箱',
-    private String grid_datashow_key;// '数据秀发布key',
-    private Integer grid_datashow_public;// '是否发布数据秀 0否 1是',
-    private Integer grid_share_status;// '是否分享 0否 1是',
-    private Integer allow_share_status;//是否允许分享  1允许(默认) 0不允许
-    private Long category_id;//分类id
-    private String grid_tag;// '标签tag', ","分割
-
-    private Integer grid_statistic_favorite;// '收藏次数',
-    private Integer grid_statistic_comment;// '评论次数',
-    private Integer grid_statistic_like;// '点赞次数',
-    private Long grid_statistic_view;// '浏览次数',
-
-    private Long uploadsize;//上传文件的大小 字节
-    private Long mongodbsize;//mongodb的大小 字节
+    /**
+     * 表格名称
+     */
+    private String grid_name;
+    /**
+     *  '缩略图'
+     */
+    private byte[] grid_thumb;,
 
 }
