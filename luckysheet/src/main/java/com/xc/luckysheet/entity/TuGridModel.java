@@ -27,6 +27,6 @@ public class TuGridModel implements BaseModel{
     /**
      *  '缩略图'
      */
-    private byte[] grid_thumb;,
+    private byte[] grid_thumb;
 
 }
