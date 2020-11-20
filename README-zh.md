@@ -3,7 +3,7 @@
 简体中文 | [English](./README.md)
 
 ## 介绍
-💻[Luckysheet](https://github.com/mengshukeji/Luckysheet/) 官方Java版本后台，采用OT算法。
+💻[Luckysheet](https://github.com/mengshukeji/Luckysheet/) 官方Java版本后台。
 
 ## 演示
 - [协同编辑Demo](http://luckysheet.lashuju.com/demo/)（注意：请大家别操作频繁，防止搞崩服务器）
