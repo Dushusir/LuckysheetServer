@@ -22,7 +22,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         //1.注册WebSocket
         //设置websocket的地址
-        String websocket_url = "/websocket/qksheet";
+        String websocket_url = "/websocket/luckysheet";
         //注册Handler
         registry.addHandler(getMyWebSocketHandler(), websocket_url).
                 //注册Interceptor
@@ -32,7 +32,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
 
         //2.注册SockJS，提供SockJS支持(主要是兼容ie8)
         //设置sockjs的地址
-        String sockjs_url = "/sockjs/qksheet";
+        String sockjs_url = "/sockjs/luckysheet";
         //注册Handler
         registry.addHandler(getMyWebSocketHandler(), sockjs_url).
                 //注册Interceptor
