@@ -8,7 +8,7 @@ import com.xc.common.utils.JsonUtil;
 import com.xc.luckysheet.entity.ConfigMergeModel;
 import com.xc.luckysheet.entity.JfGridConfigModel;
 import com.xc.luckysheet.entity.PgGridDataModel;
-import com.xc.luckysheet.entity.TuGridModel;
+import com.xc.luckysheet.entity.LuckySheetGridModel;
 import com.xc.luckysheet.entity.enummodel.SheetOperationEnum;
 import com.xc.luckysheet.postgre.dao.PostgresGridFileDao;
 import com.xc.luckysheet.redisserver.GridFileRedisCacheService;
@@ -1542,7 +1542,7 @@ public class PostgresJfGridUpdateService {
             if (bson.containsField("v")) {
                 v = bson.get("v").toString().trim();
             }
-            TuGridModel model = new TuGridModel();
+            LuckySheetGridModel model = new LuckySheetGridModel();
             //model.setMongodbkey(gridKey.toString());
             model.setList_id(gridKey);
             model.setGrid_name(v);
@@ -1605,7 +1605,7 @@ public class PostgresJfGridUpdateService {
                 return "更新失败";
             }
 
-            TuGridModel models = new TuGridModel();
+            LuckySheetGridModel models = new LuckySheetGridModel();
             //model.setMongodbkey(gridKey.toString());
             models.setList_id(gridKey);
             models.setGrid_thumb(img.getBytes("UTF-8"));

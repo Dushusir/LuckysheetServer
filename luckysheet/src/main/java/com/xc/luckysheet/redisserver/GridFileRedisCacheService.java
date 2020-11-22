@@ -21,25 +21,21 @@ public class GridFileRedisCacheService {
     @Autowired
     private RedisQueueService redisQueueService;
 
-    /**
-     * redis存入包名
-     */
-    public String email_check_content="email_recheck_num:";
 
     /**
      * 批量更新数据
      */
-    private String dbdata_content="qk:dbdata:";
+    private String dbdata_content="lk:dbdata:";
 
     /**
      * 收集指令信息
      */
-    private String hand_flag_content="qk:upflag:";
+    private String hand_flag_content="lk:upflag:";
 
     /**
      * 收集指令信息内容
      */
-    private String qk_handle_content="qk:handler:";
+    private String qk_handle_content="lk:handler:";
 
 
     public List<DBObject> rgetDbDataContent(String key){

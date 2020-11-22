@@ -156,23 +156,55 @@ logback-spring.xml 日志配置
 ```
  <property name="log.path" value="日志输出目录"/>
 ```
-## 项目主要类
+## 项目说明
+
+### luckysheet模块主要类说明
 com.xc.luckysheet.WebApplication 项目启动类
 
-com.xc.luckysheet.controller.JfGridFileController 表格数据加载类
+com.xc.luckysheet.controller
 ```
-/load       加载表格结构
-/loadsheet  加载指定表格 
+JfGridFileController 表格数据加载类
+TestController  postgre redis 测试类 
 ```
-com.xc.luckysheet.websocket.WebSocketConfig websocket地址配置类
+com.xc.luckysheet.entity
 ```
-//1.注册WebSocket 设置websocket的地址
-String websocket_url = "/websocket/luckysheet";
-//2.注册SockJS，提供SockJS支持(主要是兼容ie8) 设置sockjs的地址
-String sockjs_url = "/sockjs/luckysheet";        
+SheetOperationEnum 表格操作类型
+JfGridConfigModel 表格块对象
+LuckySheetGridModel 表格数据库对象
+PgGridDataModel 表格sheet数据库对象
+```
+com.xc.luckysheet.postgre
+```
+PostgresGridFileDao postgre数据库操作
+PostgresGridFileGetService 记录操作
+PostgresJfGridUpdateService 更新处理
+```
+com.xc.luckysheet.redisserver
+```
+RedisLock redis锁
+RedisMessageListener 管道监听类
+RedisMessagePublish 管道发布类
+```
+com.xc.luckysheet.service
+```
+ConfigerService 配置类
+ScheduleService 对定时数据库初始化
+```
+com.xc.luckysheet.utils
+```
+GzipHandle 信息压缩
+Pako_GzipUtils webdocket信息压缩
+```
+com.xc.luckysheet.websocket
+```
+IpAndPortUtil 获取当前服务的ip与端口
+MyWebSocketHandler Socket处理器(包括发送信息，接收信息，信息错误等方法。)
+MyWebSocketInterceptor Socket建立连接（握手）和断开
+WebSocketConfig 注册WebSocket 设置websocket的地址
+WSUserModel websocket对象
 ```
 
-common模块
+### common模块主要类说明
 ```
 com.xc.common.config.datasource.DataSourceConfig 数据源配置类
 com.xc.common.config.redis.RedisConfig redis配置类

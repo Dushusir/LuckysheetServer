@@ -3,7 +3,7 @@ package com.xc.luckysheet.controller;
 
 import com.mongodb.DBObject;
 import com.xc.common.utils.JsonUtil;
-import com.xc.luckysheet.entity.TuGridModel;
+import com.xc.luckysheet.entity.LuckySheetGridModel;
 import com.xc.luckysheet.entity.enummodel.OperationTypeEnum;
 import com.xc.luckysheet.postgre.server.PostgresGridFileGetService;
 import com.xc.luckysheet.utils.Pako_GzipUtils;
@@ -165,7 +165,7 @@ public class JfGridFileController {
      * @param operationTypeEnum
      * @return
      */
-    private String check(HttpServletRequest request, String _id, TuGridModel curmodel, OperationTypeEnum operationTypeEnum){
+    private String check(HttpServletRequest request, String _id, LuckySheetGridModel curmodel, OperationTypeEnum operationTypeEnum){
         //校验代码
         return "";
     }
