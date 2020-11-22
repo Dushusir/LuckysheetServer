@@ -157,20 +157,25 @@ logback-spring.xml 日志配置
  <property name="log.path" value="日志输出目录"/>
 ```
 ## 项目主要类
-WebApplication 项目启动类
+com.xc.luckysheet.WebApplication 项目启动类
 
-JfGridFileController 表格数据加载类
+com.xc.luckysheet.controller.JfGridFileController 表格数据加载类
 ```
 /load       加载表格结构
 /loadsheet  加载指定表格 
 ```
-WebSocketConfig websocket地址配置类
+com.xc.luckysheet.websocket.WebSocketConfig websocket地址配置类
 ```
 //1.注册WebSocket 设置websocket的地址
 String websocket_url = "/websocket/luckysheet";
 //2.注册SockJS，提供SockJS支持(主要是兼容ie8) 设置sockjs的地址
 String sockjs_url = "/sockjs/luckysheet";        
-        
+```
+
+common模块
+```
+com.xc.common.config.datasource.DataSourceConfig 数据源配置类
+com.xc.common.config.redis.RedisConfig redis配置类
 ```
 
 ## 相关链接

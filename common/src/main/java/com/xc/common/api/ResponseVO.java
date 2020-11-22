@@ -18,7 +18,7 @@ import java.io.Serializable;
 @ApiModel(value = "请求返回类",description = "请求响应参数")
 public class ResponseVO implements Serializable {
 
-    private static final long serialVersionUID = -1274772856847604220L;
+    private static final long serialVersionUID = 1l;
 
 
     /**
@@ -79,19 +79,6 @@ public class ResponseVO implements Serializable {
         return res;
     }
 
-    /**
-     * 失败错误消息
-     * @return
-     */
-    public static ResponseVO errorInstance() {
-        ResponseVO res = successInstance();
-
-        res.setStatus(SysConstant.STATUS.Invalid);
-        res.setCode(SysConstant.SYS_CODE.STATUS_ERROR);
-        res.setMsg(SysConstant.MSG.ERROR);
-
-        return res;
-    }
 
     /**
      * 失败错误消息
@@ -108,45 +95,6 @@ public class ResponseVO implements Serializable {
         return res;
     }
 
-    /**
-     * 失败错误消息
-     * @param code 消息代码
-     * @return
-     */
-    public static ResponseVO errorInstance(String code, String msg) {
-        ResponseVO res = successInstance();
 
-        res.setStatus(SysConstant.STATUS.Invalid);
-        res.setCode(StringUtils.isBlank(code) ? SysConstant.SYS_CODE.STATUS_ERROR : code);
-        res.setMsg(StringUtils.isBlank(msg) ? SysConstant.MSG.ERROR : msg);
 
-        return res;
-    }
-
-    /**
-     * 失败错误消息
-     * @param status 状态代码
-     * @param code  消息代码
-     * @param msg
-     * @return
-     */
-    public static ResponseVO errorInstance(String status,String code, String msg) {
-        ResponseVO res = successInstance();
-
-        res.setStatus(StringUtils.isBlank(status) ? SysConstant.STATUS.Invalid : status);
-        res.setCode(StringUtils.isBlank(code) ? SysConstant.SYS_CODE.STATUS_ERROR : code);
-        res.setMsg(StringUtils.isBlank(msg) ? SysConstant.MSG.ERROR : msg);
-
-        return res;
-    }
-
-    /**
-     * 获取指定类型的对象
-     * @param cls
-     * @return
-     */
-    @SuppressWarnings("unchecked")
-    public <T> T getData(Class<T> cls){
-        return (T)this.getData();
-    }
 }
