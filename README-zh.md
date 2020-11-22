@@ -16,9 +16,10 @@ postgre >= 10 (支持jsonb的版本)
 - [Docker部署postgre](https://www.cnblogs.com/xuchen0117/p/13863509.html)
 - [postgre中jsonb字段处理](https://www.cnblogs.com/xuchen0117/p/13890710.html)
 
-
 redis >= 3
 - [Docker部署Reids](https://www.cnblogs.com/xuchen0117/p/12183399.html)
+- [Docker部署Reids集群](https://www.cnblogs.com/xuchen0117/p/11678931.html)
+
 
 nginx >= 1.12
 - [Docker部署Nginx](https://www.cnblogs.com/xuchen0117/p/11934202.html)
