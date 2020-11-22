@@ -98,7 +98,7 @@ map $http_upgrade $connection_upgrade {
     ''      close;
 }
 
-upstream ws_dataqk {
+upstream ws_dataluckysheet {
       server 项目的ip:端口;
 }    
 ```
@@ -106,7 +106,7 @@ server块配置
 ```
 #websocket配置
 location /luckysheet/websocket/luckysheet {
-    proxy_pass http://ws_dataqk/luckysheet/websocket/luckysheet;
+    proxy_pass http://ws_dataluckysheet/luckysheet/websocket/luckysheet;
 
     proxy_set_header Host $host;
     proxy_set_header X-real-ip $remote_addr;
@@ -120,7 +120,7 @@ location /luckysheet/websocket/luckysheet {
 
 #动态资源配置
 location /luckysheet/ {
-    proxy_pass http://ws_dataqk;
+    proxy_pass http://ws_dataluckysheet;
 }
 
 #静态资源配置
