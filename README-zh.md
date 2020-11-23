@@ -26,7 +26,7 @@ nginx >= 1.12
 
 maven >= 3.6 
 
-Intelli JIDEA >= 12 (非必须)
+IntelliJ IDEA >= 12 (非必须)
 
 ## 数据库初始化
 
