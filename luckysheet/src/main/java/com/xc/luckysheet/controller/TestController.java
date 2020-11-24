@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,7 +22,7 @@ import java.util.Map;
  * jar启动
  * java -jar luckysheet.jar
  * 测试类
- *
+ * http://localhost:9004/luckysheet/doc.html#/home
  * http://luckysheet.lashuju.com/demo/qkIndex.html
  * http://127.0.0.1:85/luckysheet/demo/
  * @author Administrator
@@ -69,6 +70,12 @@ public class TestController {
         return ResponseVO.successInstance(redisCacheService.getCache(key));
     }
 
+    @ApiOperation(value = "初始化db",notes = "初始化db")
+    @GetMapping("dbInit")
+    public ResponseVO dbInit(){
+        postgresJfGridUpdateService.initTestData();
+        return ResponseVO.successInstance("success");
+    }
 
 
 }
