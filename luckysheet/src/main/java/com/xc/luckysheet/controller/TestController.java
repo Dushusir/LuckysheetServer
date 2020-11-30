@@ -14,9 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * jar启动
@@ -74,6 +72,14 @@ public class TestController {
     @GetMapping("dbInit")
     public ResponseVO dbInit(){
         postgresJfGridUpdateService.initTestData();
+        return ResponseVO.successInstance("success");
+    }
+    @ApiOperation(value = "初始化db",notes = "初始化db")
+    @GetMapping("dbInit/one")
+    public ResponseVO dbInit(String listId){
+        List<String> listName=new ArrayList<String>();
+        listName.add(listId);
+        postgresJfGridUpdateService.initTestData(listName);
         return ResponseVO.successInstance("success");
     }
 

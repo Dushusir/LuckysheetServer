@@ -2028,13 +2028,21 @@ public class PostgresJfGridUpdateService {
      * 初始化测试数据
      */
     public void initTestData(){
-        int delCount=pgGridFileDao.deleteAll();
-        log.info("del row:{}",delCount);
-        List<PgGridDataModel> models=new ArrayList<>(6);
         List<String> listName=new ArrayList<String>(2){{
             add("1079500#-8803#7c45f52b7d01486d88bc53cb17dcd2xc");
             add("1079500#-8803#7c45f52b7d01486d88bc53cb17dcd2c3");
         }};
+    }
+    public void initTestData(List<String> listName){
+        //int delCount=pgGridFileDao.deleteAll();
+        //log.info("del row:{}",delCount);
+        int[] delCount=pgGridFileDao.delete(listName);
+        log.info("del row:{}",delCount);
+        List<PgGridDataModel> models=new ArrayList<>(6);
+//        List<String> listName=new ArrayList<String>(2){{
+//            add("1079500#-8803#7c45f52b7d01486d88bc53cb17dcd2xc");
+//            add("1079500#-8803#7c45f52b7d01486d88bc53cb17dcd2c3");
+//        }};
         for(String n:listName) {
             for (int x = 0; x < 3; x++) {
                 if(x==0){
@@ -2046,8 +2054,6 @@ public class PostgresJfGridUpdateService {
         }
         String result=insert(models);
         log.info(result);
-
-
     }
     private PgGridDataModel strToModel(String list_id,String index,int status,int order){
         String strSheet="{\"row\":84,\"name\":\"reSheetName\",\"chart\":[],\"color\":\"\",\"index\":\"reIndex\",\"order\":reOrder,\"column\":60,\"config\":{},\"status\":reStatus,\"celldata\":[],\"ch_width\":4748,\"rowsplit\":[],\"rh_height\":1790,\"scrollTop\":0,\"scrollLeft\":0,\"visibledatarow\":[],\"visibledatacolumn\":[],\"jfgird_select_save\":[],\"jfgrid_selection_range\":{}}";

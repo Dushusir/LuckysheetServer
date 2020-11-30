@@ -16,13 +16,16 @@ import org.springframework.data.util.Pair;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.object.BatchSqlUpdate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.*;
 
 /**
@@ -1183,5 +1186,19 @@ public class PostgresGridFileDao {
             log.warn(e.getMessage());
         }
         return 0;
+    }
+
+    public int[] delete(List<String> listIds ){
+        if(listIds==null && listIds.size()==0){
+            return new int[]{};
+        }
+        DataSource ds = jdbcTemplate_postgresql.getDataSource();
+        BatchSqlUpdate bsu = new BatchSqlUpdate(ds, " delete  from "+TableName +" where list_id = ? ");
+        bsu.setBatchSize(4);
+        bsu.setTypes(new int[]{Types.VARCHAR});
+        for(int i = 0; i < listIds.size(); i++){
+            log.info(bsu.update(new Object[]{listIds.get(i)})+"");
+        }
+        return bsu.flush();
     }
 }
