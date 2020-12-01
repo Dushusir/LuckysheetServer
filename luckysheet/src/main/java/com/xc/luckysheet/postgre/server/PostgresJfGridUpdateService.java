@@ -2032,6 +2032,7 @@ public class PostgresJfGridUpdateService {
             add("1079500#-8803#7c45f52b7d01486d88bc53cb17dcd2xc");
             add("1079500#-8803#7c45f52b7d01486d88bc53cb17dcd2c3");
         }};
+        initTestData(listName);
     }
     public void initTestData(List<String> listName){
         //int delCount=pgGridFileDao.deleteAll();
@@ -2070,4 +2071,5 @@ public class PostgresJfGridUpdateService {
         model.setList_id(list_id);
         return model;
     }
+
 }
