@@ -23,6 +23,7 @@ import java.util.*;
  * http://localhost:9004/luckysheet/doc.html#/home
  * http://luckysheet.lashuju.com/demo/qkIndex.html
  * http://127.0.0.1:85/luckysheet/demo/
+ * http://localhost:9004/luckysheet/test/constant?param=123
  * @author Administrator
  */
 @Slf4j

@@ -74,7 +74,7 @@ public class PostgresGridFileDao {
         }
 
         String sql = "insert into "+TableName+" (id,block_id,index,list_id,status,json_data,\"order\",is_delete) values " +
-                " (nextval('mytable_myid_seq'),?,?,?,?,?,?,0)";
+                " (nextval('luckysheet_id_seq'),?,?,?,?,?,?,0)";
         try{
             jdbcTemplate_postgresql.update(sql,pgModel.getBlock_id().trim(),pgModel.getIndex(),pgModel.getList_id(),pgModel.getStatus(),pg,pgModel.getOrder());
             return "";
@@ -190,7 +190,7 @@ public class PostgresGridFileDao {
      */
     public String InsertIntoBatch(List<PgGridDataModel> models){
         String sql = "insert into "+TableName+" (id,block_id,index,list_id,status,\"order\",json_data,is_delete) values " +
-                " (nextval('mytable_myid_seq'),?,?,?,?,?,?,0)";
+                " (nextval('luckysheet_id_seq'),?,?,?,?,?,?,0)";
         List<Object[]>batch=new ArrayList<Object[]>();
         for(PgGridDataModel b : models){
             List<Object> objectList=new ArrayList<Object>();
@@ -751,7 +751,7 @@ public class PostgresGridFileDao {
     //批量添加
     public String InsertBatchDb(List<DBObject>models){
         String sql = "insert into "+TableName+" (id,block_id,index,list_id,status,\"order\",json_data,is_delete) values " +
-                " (nextval('mytable_myid_seq'),?,?,?,?,?,?,0)";
+                " (nextval('luckysheet_id_seq'),?,?,?,?,?,?,0)";
         List<Object[]>batch=new ArrayList<Object[]>();
         int order=0;
         for(DBObject b : models){
@@ -1033,7 +1033,7 @@ public class PostgresGridFileDao {
             String delsql="DELETE from "+TableName+" where list_id=? and block_id in ("+id+") and index=? ";
             jdbcTemplate_postgresql.update(delsql,new Object[]{models.get(0).getList_id(),models.get(0).getIndex()});
             String sql = "insert into "+TableName+" (id,block_id,index,list_id,status,\"order\",json_data,is_delete) values " +
-                    " (nextval('mytable_myid_seq'),?,?,?,?,?,?,0)";
+                    " (nextval('luckysheet_id_seq'),?,?,?,?,?,?,0)";
             List<Object[]>batch=new ArrayList<Object[]>();
             for(PgGridDataModel b : models){
                 List<Object> objectList=new ArrayList<Object>();
