@@ -732,7 +732,7 @@ public class PostgresGridFileDao {
     }
 
     //sheet多块更新（先删除后添加）
-    @Transactional("txPostgresqlManager")
+    @Transactional("postgreTxManager")
     public Boolean updateMulti2(List<DBObject> blocks,List<String> ids){
         try{
             if(ids!=null && ids.size()>0){
