@@ -732,19 +732,21 @@ public class PostgresGridFileDao {
     }
 
     //sheet多块更新（先删除后添加）
-    @Transactional("postgreTxManager")
+    @Transactional(value = "postgreTxManager",rollbackFor = Exception.class)
     public Boolean updateMulti2(List<DBObject> blocks,List<String> ids){
         try{
             if(ids!=null && ids.size()>0){
                 delDocuments(ids);
             }
-            InsertBatchDb(blocks);
-            //需要事物
+            String _mongodbKey = InsertBatchDb(blocks);
+            if (_mongodbKey == null) {
+                throw new RuntimeException("插入报错");
+            }
             return true;
         }catch (Exception e){
             log.error(e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
-        return false;
     }
 
     //添加jsonb
@@ -759,7 +761,12 @@ public class PostgresGridFileDao {
             objectList.add(b.get("block_id").toString().trim());
             objectList.add(b.get("index"));
             objectList.add(b.get("list_id"));
-            objectList.add(b.get("status"));
+            if(b.containsField("status") && b.get("status")!=null){
+                objectList.add(b.get("status"));
+            }else{
+                objectList.add(0);
+            }
+
             if(b.containsField("order") && b.get("order")!=null){
                 objectList.add(b.get("order"));
                 order=Integer.valueOf(b.get("order").toString());
@@ -849,7 +856,7 @@ public class PostgresGridFileDao {
         }
     }
 
-    @Transactional("postgreTxManager")
+    @Transactional(value = "postgreTxManager",rollbackFor = Exception.class)
     public boolean  updateDataStatus(PgGridDataModel model){
         try{
 
@@ -863,11 +870,11 @@ public class PostgresGridFileDao {
             return true;
         }catch (Exception e){
             log.error(e.getMessage());
-            return false;
+            throw new RuntimeException(e.getMessage());
         }
     }
 
-    @Transactional("postgreTxManager")
+    @Transactional(value = "postgreTxManager",rollbackFor = Exception.class)
     public boolean  updateDataMsgHide(PgGridDataModel model,Integer hide,String index1,String index2){
         try{
             String sql1="update "+TableName+" set status=0 ,json_data=jsonb_set(json_data,'{hide}'::text[],'"+hide+"',true) where  list_id='"+model.getList_id()+"' and index='"+index1+"' and block_id='fblock'";
@@ -879,11 +886,11 @@ public class PostgresGridFileDao {
             return true;
         }catch (Exception e){
             log.error(e.getMessage());
-            return false;
+            throw new RuntimeException(e.getMessage());
         }
     }
 
-    @Transactional("postgreTxManager")
+    @Transactional(value = "postgreTxManager",rollbackFor = Exception.class)
     public boolean  updateDataMsgNoHide(PgGridDataModel model,Integer hide,String index){
         try{
 
@@ -897,7 +904,7 @@ public class PostgresGridFileDao {
             return true;
         }catch (Exception e){
             log.error(e.getMessage());
-            return false;
+            throw new RuntimeException(e.getMessage());
         }
     }
     public List<DBObject> getAllIndexsByGridKey(String list_id, List<String> indexs) {
@@ -1082,7 +1089,7 @@ public class PostgresGridFileDao {
     }
 
     //jsonb数据中元素添加元素
-    @Transactional(value = "postgreTxManager")
+    @Transactional(value = "postgreTxManager",rollbackFor = Exception.class)
     public boolean updateJsonbForInsertNull(Query query,String word,DBObject db,Integer position,String words){
         String condition="";
         try{
@@ -1106,12 +1113,12 @@ public class PostgresGridFileDao {
             return true;
         }catch (Exception ex){
             log.error(ex.getMessage());
-            return false;
+            throw new RuntimeException(ex.getMessage());
         }
     }
 
     //jsonb数据中元素添加元素
-    @Transactional(value = "postgreTxManager")
+    @Transactional(value = "postgreTxManager",rollbackFor = Exception.class)
     public boolean updateJsonbForSetNull(Query query,String word,DBObject db,Integer position){
         String condition="";
         try{
@@ -1136,7 +1143,7 @@ public class PostgresGridFileDao {
             return true;
         }catch (Exception ex){
             log.error(ex.getMessage());
-            return false;
+            throw new RuntimeException(ex.getMessage());
         }
     }
 
@@ -1149,7 +1156,7 @@ public class PostgresGridFileDao {
      * @param words
      * @return
      */
-    @Transactional(value = "postgreTxManager")
+    @Transactional(value = "postgreTxManager",rollbackFor = Exception.class)
     public boolean updateJsonbForSetRootNull(Query query,String word,DBObject db,Integer position,String words){
         String condition="";
         try{
@@ -1173,7 +1180,7 @@ public class PostgresGridFileDao {
             return true;
         }catch (Exception ex){
             log.error(ex.getMessage());
-            return false;
+            throw new RuntimeException(ex.getMessage());
         }
     }
 
