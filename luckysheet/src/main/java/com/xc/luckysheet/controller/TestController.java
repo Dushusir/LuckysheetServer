@@ -75,7 +75,7 @@ public class TestController {
         postgresJfGridUpdateService.initTestData();
         return ResponseVO.successInstance("success");
     }
-    @ApiOperation(value = "初始化db",notes = "初始化db")
+    @ApiOperation(value = "初始化db单个",notes = "初始化db单个")
     @GetMapping("dbInit/one")
     public ResponseVO dbInit(String listId){
         List<String> listName=new ArrayList<String>();
