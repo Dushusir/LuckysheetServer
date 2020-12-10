@@ -849,7 +849,7 @@ public class PostgresGridFileDao {
         }
     }
 
-    @Transactional("txPostgresqlManager")
+    @Transactional("postgreTxManager")
     public boolean  updateDataStatus(PgGridDataModel model){
         try{
 
@@ -867,7 +867,7 @@ public class PostgresGridFileDao {
         }
     }
 
-    @Transactional("txPostgresqlManager")
+    @Transactional("postgreTxManager")
     public boolean  updateDataMsgHide(PgGridDataModel model,Integer hide,String index1,String index2){
         try{
             String sql1="update "+TableName+" set status=0 ,json_data=jsonb_set(json_data,'{hide}'::text[],'"+hide+"',true) where  list_id='"+model.getList_id()+"' and index='"+index1+"' and block_id='fblock'";
@@ -883,7 +883,7 @@ public class PostgresGridFileDao {
         }
     }
 
-    @Transactional("txPostgresqlManager")
+    @Transactional("postgreTxManager")
     public boolean  updateDataMsgNoHide(PgGridDataModel model,Integer hide,String index){
         try{
 
