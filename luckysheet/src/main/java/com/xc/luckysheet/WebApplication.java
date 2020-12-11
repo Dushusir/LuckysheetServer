@@ -18,7 +18,6 @@ import org.springframework.transaction.PlatformTransactionManager;
 @Slf4j
 @EnableScheduling
 @Configuration
-//@SpringBootApplication(exclude={DataSourceAutoConfiguration.class,HibernateJpaAutoConfiguration.class})
 @SpringBootApplication(scanBasePackages = "com.xc",exclude={MongoAutoConfiguration.class})
 public class WebApplication extends SpringBootServletInitializer {
     public static void main(String[] args) {
