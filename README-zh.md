@@ -216,6 +216,19 @@ com.xc.common.config.datasource.DataSourceConfig 数据源配置类
 com.xc.common.config.redis.RedisConfig redis配置类
 ```
 
+### websocket 返回数据格式
+```
+{
+    createTime: 命令发送时间
+    data:{} 修改的命令
+    id: "7a"   websocket的id
+    returnMessage: "success"
+    status: "0"  0告诉前端需要根据data的命令修改  1无意义
+    type: 0：连接成功，1：发送给当前连接的用户，2：发送信息给其他用户，3：发送选区位置信息，999：用户连接断开
+    username: 用户名
+}
+```
+
 ## 相关链接
 - [Luckysheet官方文档](https://mengshukeji.github.io/LuckysheetDocs/)
 - [Luckysheet如何把表格里的数据保存到数据库](https://www.cnblogs.com/DuShuSir/p/13857874.html)
