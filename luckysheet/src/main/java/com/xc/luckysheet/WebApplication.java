@@ -35,4 +35,5 @@ public class WebApplication extends SpringBootServletInitializer {
         System.out.println(">>>>>>>>>>" + platformTransactionManager.getClass().getName());
         return new Object();
     }
+
 }

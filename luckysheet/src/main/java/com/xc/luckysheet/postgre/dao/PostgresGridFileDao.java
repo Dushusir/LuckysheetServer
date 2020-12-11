@@ -1184,7 +1184,6 @@ public class PostgresGridFileDao {
         }
     }
 
-
     public int deleteAll(){
         String sql="delete from "+TableName;
         try{
